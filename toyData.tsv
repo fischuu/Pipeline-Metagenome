@@ -1,0 +1,5 @@
+sample	read1	read2	lane	condition1
+toy1	/home/ejo138/data/toy/toy1_R1.fastq.gz	/home/ejo138/data/toy/toy1_R2.fastq.gz	1	case
+toy2    /home/ejo138/data/toy/toy2_R1.fastq.gz  /home/ejo138/data/toy/toy2_R2.fastq.gz	1  case
+toy3    /home/ejo138/data/toy/toy3_R1.fastq.gz  /home/ejo138/data/toy/toy3_R2.fastq.gz	1  control
+toy4    /home/ejo138/data/toy/toy4_R1.fastq.gz  /home/ejo138/data/toy/toy4_R2.fastq.gz	1  control
