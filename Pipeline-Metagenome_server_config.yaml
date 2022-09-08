@@ -1,0 +1,64 @@
+__default__:
+    time: 00:30:00
+    job-name:  SM_Metagenome
+    account: project_2006153
+    ntasks: 1
+    cpus-per-task: 1
+    mem-per-cpu: 4000
+    partition: small
+    working-directory: /scratch/project_XXX/logs/
+    nvme: 0
+
+# Step1 - Preparations
+################################################################################
+star_create_host_index:
+    job-name: star_create_index
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+# Step2 - ReadProcessing
+################################################################################
+Concatenate_lanes:
+    job-name: Concatenate_lanes
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+    
+fastp_trim_reads:
+    job-name: Trim_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+star_map_reads_host:
+    job-name: star_map_reads_host
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+concatenate_inputfiles_cat:
+    job-name:  concatenate_inputfiles_cat
+    time: 04:00:00
+    mem-per-cpu: 64000
+    cpus-per-task: 1
+
+# Step 3 - 
+################################################################################
+assemble_contigs_megahit:
+    job-name: assemble_contigs_megahit
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+create_index_bowtie2:
+    job-name: create_index_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+map_data_metagenome_bowtie2:
+    job-name: map_data_metagenome_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
