@@ -2,6 +2,9 @@
 module load bioconda/3
 source activate Snakemake
 
+export SINGULARITY_TMPDIR="/scratch/project_xxx/tmp"
+export SINGULARITY_CACHEDIR="/scratch/project_xxx/tmp"
+
 # Create the rulegraph
 snakemake -s ~/git/Pipeline-Metagenome/Snakefile-Pipeline-Metagenome.smk \
           --configfile /scratch/project_XXX/Pipeline-WGS_config.yaml \
