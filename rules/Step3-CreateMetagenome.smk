@@ -18,8 +18,6 @@ rule assemble_contigs_megahit:
         mem=cluster["assemble_contigs_megahit"]["mem-per-cpu"]
     threads: cluster["assemble_contigs_megahit"]["cpus-per-task"]
     shell:"""
-        module load megahit/1.1.4;
-
         megahit -1 {input.r1}  -2 {input.r2}  --keep-tmp-files -t {threads}  -o {output.temp_dir} &> {log};
         
         mv {output.temp_dir}/final.contigs.fa {output.contigs};
