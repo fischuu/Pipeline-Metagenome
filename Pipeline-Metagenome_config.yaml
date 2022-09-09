@@ -26,5 +26,6 @@ singularity:
   star: "docker://fischuu/star:2.7.5a"
   wgs: "docker://fischuu/wgs:0.2"
   r-gbs: "docker://fischuu/r-gbs:4.2.1-0.1"
-  megahit: "docker://fischuu/megahit:1.2.9-0.1"
+  megahit: "docker://fischuu/megahit:1.2.9-0.2"
   bowtie2: "docker://fischuu/bowtie2:2.4.4-0.1"
+  prodigal: "docker://fischuu/prodigal:2.6.3-0.1"

@@ -111,7 +111,8 @@ rule all:
       "%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
       "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"]),
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
-      expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples)
+      expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
+      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"])
 
 rule preparations:
     input:
@@ -138,5 +139,6 @@ include: "rules/Step1-Preparations.smk"
 include: "rules/Step2-ReadProcessing.smk"
 include: "rules/Step2b-Decontamination.smk"
 include: "rules/Step3-CreateMetagenome.smk"
+include: "rules/Step4-GenePrediction.smk"
 #include: "rules/Step3-QC.smk"
 #include: "rules/Step4-Alignment.smk"

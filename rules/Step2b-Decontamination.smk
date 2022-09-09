@@ -101,13 +101,14 @@ else:
                 lastI="$i"
             done
            
-            mv {wildcards.samples}_"$lastI"_R1.decontaminated.fastq.gz {wildcards.samples}_R1.decontaminated.fastq.gz;
-            mv {wildcards.samples}_"$lastI"_R2.decontaminated.fastq.gz {wildcards.samples}_R2.decontaminated.fastq.gz;
+            mv {wildcards.samples}_"$lastI"_R1.decontaminated.fastq.gz {wildcards.samples}_R1.decontaminated.fastq.gz
+            mv {wildcards.samples}_"$lastI"_R2.decontaminated.fastq.gz {wildcards.samples}_R2.decontaminated.fastq.gz
 
-            mkdir -p {params.project_folder}/FASTQ/DECONTAMINATED;
-            mv {wildcards.samples}_R1.decontaminated.fastq.gz {params.project_folder}/FASTQ/DECONTAMINATED;
-            mv {wildcards.samples}*decontaminated.fastq.wcl {params.project_folder}/FASTQ/DECONTAMINATED;
+            mkdir -p {params.project_folder}/FASTQ/DECONTAMINATED
+            mv {wildcards.samples}_R1.decontaminated.fastq.gz {params.project_folder}/FASTQ/DECONTAMINATED/
+            mv {wildcards.samples}_R2.decontaminated.fastq.gz {params.project_folder}/FASTQ/DECONTAMINATED/
+            mv {wildcards.samples}*decontaminated.fastq.wcl {params.project_folder}/FASTQ/DECONTAMINATED/
 
-            rm {wildcards.samples}_*_R1.decontaminated.fastq.gz;
-            rm {wildcards.samples}_*_R2.decontaminated.fastq.gz;
+            #rm {wildcards.samples}_*_R1.decontaminated.fastq.gz
+            #rm {wildcards.samples}_*_R2.decontaminated.fastq.gz
         """

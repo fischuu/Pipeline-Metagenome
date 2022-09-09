@@ -74,3 +74,17 @@ map_data_metagenome_bowtie2:
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+
+# Step 4 -
+################################################################################
+prodigal_gene_prediction:
+    job-name: prodigal_gene_prediction
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+cut_prodigal_bash:
+    job-name: cut_prodigal_bash
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
