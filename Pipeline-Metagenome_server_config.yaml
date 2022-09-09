@@ -6,7 +6,7 @@ __default__:
     cpus-per-task: 1
     mem-per-cpu: 4000
     partition: small
-    working-directory: /scratch/project_XXX/logs/
+    working-directory: /scratch/project_2006153/logs/
     nvme: 0
 
 # Step1 - Preparations
@@ -42,6 +42,18 @@ concatenate_inputfiles_cat:
     time: 04:00:00
     mem-per-cpu: 64000
     cpus-per-task: 1
+
+build_contamination_indices:
+    job-name: build_contamination_indices
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+star_decontaminate_reads:
+    job-name: star_decontaminate_reads
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
 
 # Step 3 - 
 ################################################################################

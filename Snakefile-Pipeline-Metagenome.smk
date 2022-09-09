@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.1.1
-version = "0.1.1"
+##### Version: 0.1.2
+version = "0.1.2"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -31,9 +31,6 @@ lane=list(samplesheet.lane)
 workdir: config["project-folder"]
 
 ##### Complete the input configuration
-config["host-dict"] = os.path.splitext(config["host"])[0]+".dict"
-config["host-fai"] =  config["host"]+".fai"
-config["host-index"] = config["host"]+".amb"
 config["report-script"] = config["pipeline-folder"]+"/scripts/workflow-report.Rmd"
 
 wildcard_constraints:
@@ -56,6 +53,10 @@ if config["rawdata-folder"][-1] != '/':
 if config["project-folder"][-1] == '/':
    config["project-folder"]=config["project-folder"][:-1]
 
+if config["contamination-folder"] != "":
+  if config["contamination-folder"][-1] == '/':
+     config["contamination-folder"]=config["contamination-folder"][:-1]
+
 ##### input function definitions ######
 
 def get_fastq_for_concatenating_read1(wildcards):
@@ -70,11 +71,24 @@ def get_fastq_for_concatenating_read2(wildcards):
     output = [path + x for x in r1]
     return output  
 
-##### Deriving runtime paramteres ######
-if config["starbase"] == "":
-    config["starbase"] = os.path.dirname(config["host"])+"/STAR"
+def merge_r1_reads(wildcards):
+    samples = set(samplesheet["sample_name"])
+    if config["contamination-folder"] == "":
+      out = expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
+    else:
+      out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+    return out
 
-config["host-index"] = config["starbase"]+"/Host"
+def merge_r2_reads(wildcards):
+    samples = set(samplesheet["sample_name"])
+    if config["contamination-folder"] == "":
+      out = expand("%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
+    else:
+      out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R2.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+    return out
+
+
+##### Deriving runtime paramteres ######
 
 ##### Print some welcoming summary #####
 
@@ -86,15 +100,14 @@ print("##### Number of rawsamples : "+str(len(rawsamples)))
 print("##### Number of samples    : "+str(len(samples)))
 print("##### Rawdata folder       : "+config["rawdata-folder"])
 print("##### Project folder       : "+config["project-folder"])
-print("##### Host genome          :" +config["host"])
-print("##### Starbase             :" +config["starbase"])
+print("##### Contamination folder :" +config["contamination-folder"])
+#print("##### Contamination refs   :" +config["contamination-refs"])
 print("#####")
 
 ##### run complete pipeline #####
 
 rule all:
     input:
-      expand("%s/BAM/{samples}.bam" % (config["project-folder"]), samples=samples),
       "%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
       "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"]),
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
@@ -123,6 +136,7 @@ report: "report/workflow.rst"
 ##### load rules #####
 include: "rules/Step1-Preparations.smk"
 include: "rules/Step2-ReadProcessing.smk"
+include: "rules/Step2b-Decontamination.smk"
 include: "rules/Step3-CreateMetagenome.smk"
 #include: "rules/Step3-QC.smk"
 #include: "rules/Step4-Alignment.smk"

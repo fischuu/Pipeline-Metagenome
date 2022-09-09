@@ -56,55 +56,13 @@ rule fastp_trim_reads:
         fastp -i {input.R1} -I {input.R2} -o {output.R1} -O {output.R2} --trim_front1 {params.trim_front1} --trim_tail1 {params.trim_tail1} --trim_front2 {params.trim_front2} --trim_tail2 {params.trim_tail2} --thread {threads} &> {log}
 	"""
 	
-rule star_map_reads_host:
-    """
-    Map the samples to the reference genome (STAR).
-    """
-    input:
-        "%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]),
-        "%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]),
-        index="%s/chrName.txt" % (config["host-index"])
-    output:
-        file="%s/BAM/{samples}.bam" % (config["project-folder"]),
-        dir=directory("%s/BAM/{samples}" % (config["project-folder"]))
-    log:
-        "%s/logs/star_map_reads_host.{samples}.log" % (config["project-folder"])
-    benchmark:
-        "%s/benchmark/star_map_reads_host.{samples}.benchmark.tsv" % (config["project-folder"])
-    resources:
-        time=cluster["star_map_reads_host"]["time"],
-        mem=cluster["star_map_reads_host"]["mem-per-cpu"]
-    threads: cluster["star_map_reads_host"]["cpus-per-task"]
-    params:
-        index=config["host-index"]
-    singularity: config["singularity"]["star"]
-    shell:"""
-        mkdir -p {output.dir};
-
-        STAR --genomeDir {params.index} \
-            --readFilesIn {input} \
-            --readFilesCommand zcat \
-            --outFilterType BySJout \
-            --outSAMunmapped Within \
-            --outSAMtype BAM SortedByCoordinate \
-            --outSAMstrandField intronMotif \
-            --outSAMattrIHstart 0 \
-            --outFilterIntronMotifs RemoveNoncanonical \
-            --runThreadN {threads} \
-            --alignSoftClipAtReferenceEnds No \
-            --outFileNamePrefix {wildcards.samples}_ 2> {log};
-
-        mv {wildcards.samples}_Aligned.sortedByCoord.out.bam {output.file}
-        mv {wildcards.samples}_Log.final.out {wildcards.samples}_Log.progress.out {wildcards.samples}_Signal.UniqueMultiple.str2.out.bg {wildcards.samples}_Signal.Unique.str2.out.bg {wildcards.samples}_Aligned.toTranscriptome.out.bam {wildcards.samples}_Log.out {wildcards.samples}_Signal.UniqueMultiple.str1.out.bg {wildcards.samples}_Signal.Unique.str1.out.bg {wildcards.samples}_SJ.out.tab {output.dir}
-    """
-    
 rule concatenate_inputfiles_cat:
     """
     Concatenate input files (CAT).
     """
     input:
-        r1=expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples),
-        r2=expand("%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
+        r1=merge_r1_reads,
+        r2=merge_r2_reads
     output:
         r1="%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
         r2="%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"])

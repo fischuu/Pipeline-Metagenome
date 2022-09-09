@@ -4,8 +4,8 @@ rawdata-folder: "/scratch/project_2006153/CO2/FASTQ/RAW"
 server-config: "/users/fischerd/git/Pipeline-Metagenome/Pipeline-Metagenome_server_config.yaml"
 samplesheet: "/scratch/project_2006153/CO2/samplesheet.tsv"
 local-scratch: $LOCAL_SCRATCH
-host: "/scratch/project_2006153/CO2/Reference/ARS-UCD1.2_Btau5.0.1Y.fa"
-starbase: ""   # To where the STAR index should be created, leave it empty to have it at <host-dir>/STAR
+contamination-folder: "/scratch/project_2006153/CO2/Contamination/"
+contamination-refs: ["ARS-UCD1.2_Btau5.0.1Y.fa"]
 
 urls:
     host: ""
@@ -18,6 +18,9 @@ params:
     trim_tail2: 0
   fastqc:
     threads: 20
+  star:
+    overhang: 149
+    limitGenomeGenerateRAM: 300647710720
 singularity:
   fastp: "docker://fischuu/fastp:0.20.1"
   star: "docker://fischuu/star:2.7.5a"
