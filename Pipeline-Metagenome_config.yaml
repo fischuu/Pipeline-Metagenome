@@ -29,3 +29,4 @@ singularity:
   megahit: "docker://fischuu/megahit:1.2.9-0.2"
   bowtie2: "docker://fischuu/bowtie2:2.4.4-0.1"
   prodigal: "docker://fischuu/prodigal:2.6.3-0.1"
+  eggnog: "docker://fischuu"

@@ -88,3 +88,9 @@ cut_prodigal_bash:
     time: 04:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
+
+eggnog_find_homology_parallel:
+    job-name: eggnog_find_homology_parallel
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20

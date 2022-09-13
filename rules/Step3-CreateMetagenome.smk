@@ -44,7 +44,7 @@ rule create_index_bowtie2:
 
     # WARNING, THIS CREATES THE WRONG OUTPUT!! IT SHOULD CREATE bt2mega.* , BUT IT CREATES ONLY .* FILES!!!!
     
-        bowtie2-build --threads {threads} {input} {output.dir}
+        bowtie2-build --threads {threads} {input} {output.dir} &> {log}
     """
     
 rule map_data_metagenome_bowtie2:
