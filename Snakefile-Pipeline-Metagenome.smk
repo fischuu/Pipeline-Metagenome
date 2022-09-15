@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.1.4
-version = "0.1.4"
+##### Version: 0.1.15
+version = "0.1.15"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -98,6 +98,8 @@ config["singularity"]["megahit"] = "docker://fischuu/megahit:1.2.9-0.2"
 config["singularity"]["bowtie2"] = "docker://fischuu/bowtie2:2.4.4-0.1"
 config["singularity"]["prodigal"] = "docker://fischuu/prodigal:2.6.3-0.1"
 config["singularity"]["eggnog"] = "docker://fischuu/eggnog:latest"
+config["singularity"]["subread"] = "docker://fischuu/subread:2.0.1-0.1"
+config["singularity"]["concoct"] = "docker://nanozoo/concoct:latest"
 
 ##### Deriving runtime paramteres ######
 
@@ -116,6 +118,7 @@ print("##### Contamination folder : " +config["contamination-folder"])
 print("#####")
 print("##### Singularity configuration")
 print("##### --------------------------------")
+print("##### concoct        : "+config["singularity"]["concoct"])
 print("##### samtools       : "+config["singularity"]["samtools"])
 print("##### fastp          : "+config["singularity"]["fastp"])
 print("##### star           : "+config["singularity"]["star"])
@@ -125,6 +128,8 @@ print("##### megahit        : "+config["singularity"]["megahit"])
 print("##### bowtie2        : "+config["singularity"]["bowtie2"])
 print("##### prodigal       : "+config["singularity"]["prodigal"])
 print("##### eggnog         : "+config["singularity"]["eggnog"])
+print("##### subread        : "+config["singularity"]["subread"])
+
 ##### run complete pipeline #####
 
 rule all:
@@ -135,8 +140,17 @@ rule all:
       expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
       "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
       "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
-      "%s/PRODIGAL/input_file.emapper.seed_orthologs" % (config["project-folder"])
-
+      "%s/PRODIGAL/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
+      "%s/EGGNOG/eggnog_output.emapper.annotations" % (config["project-folder"]),
+      expand("%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"]), samples=samples),
+      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
+      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
+      "%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"]),
+      "%s/CONCOCT/coverage_table_2k.tsv" % (config["project-folder"]),
+      "%s/CONCOCT/clustering_gt1000_1k.csv" % (config["project-folder"]),
+      "%s/CONCOCT/clustering_gt1000_2k.csv" % (config["project-folder"]),
+      "%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]),
+      "%s/CONCOCT/fasta_bins_2k" % (config["project-folder"])
 
 rule preparations:
     input:
@@ -164,5 +178,4 @@ include: "rules/Step2-ReadProcessing.smk"
 include: "rules/Step2b-Decontamination.smk"
 include: "rules/Step3-CreateMetagenome.smk"
 include: "rules/Step4-GenePrediction.smk"
-#include: "rules/Step3-QC.smk"
-#include: "rules/Step4-Alignment.smk"
+include: "rules/Step5-MAGs.smk"

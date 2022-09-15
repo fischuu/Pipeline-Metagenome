@@ -23,6 +23,30 @@ rule assemble_contigs_megahit:
         mv {output.temp_dir}/final.contigs.fa {output.contigs};
     """
     
+rule filter_length_megahit:
+    """
+    Remove short contigs from the megahit output
+    """
+    input:
+        "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
+    output:
+        filter1k="%s/MEGAHIT/final.contigs.1k.fa" % (config["project-folder"]),
+        filter2k="%s/MEGAHIT/final.contigs.2k.fa" % (config["project-folder"])
+    log:
+        "%s/logs/filter_length_megahit.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/filter_length_megahit.benchmark.tsv" % (config["project-folder"])
+    params:
+        folder= config["pipeline-folder"]
+    resources:
+        time=cluster["filter_length_megahit"]["time"],
+        mem=cluster["filter_length_megahit"]["mem-per-cpu"]
+    threads: cluster["filter_length_megahit"]["cpus-per-task"]
+    shell:"""
+        {params.folder}/scripts/filterLengthFasta.sh 1000 {input} {output.filter1k}
+        {params.folder}/scripts/filterLengthFasta.sh 2000 {input} {output.filter2k}    
+    """
+    
 rule create_index_bowtie2:
     """
     Create the reference index (BOWTIE 2).

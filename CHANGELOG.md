@@ -10,6 +10,14 @@
 
 Development version 0.1.*:
 --------------------------------------------------------------------------------
+15: rule extract_fasta_concoct for 1k and 2k added
+14: rule run_concoct added for 1k and 2k
+13: rule cut_filtered_contigs_concoct added
+12: Step5-MAGs.smk ruleset started
+11: rule quantify_predictedGenes_featureCounts added
+10: rule filter_length_megahit added
+9: Eggnot orthology rule added
+8: Eggnog gene annotation added
 7: Execution script adjusted to bind local nvme discs
 6: Prodigal output is now cut in chunks for parallel processing
 5: Eggnog databases are now downloaded automatically

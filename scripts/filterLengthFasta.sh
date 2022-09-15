@@ -1,0 +1,1 @@
+awk -v len=$1 -v RS='>[^\n]+\n' 'length() >= len {printf "%s", prt $0} {prt = RT}' $2 > $3

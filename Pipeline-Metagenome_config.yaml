@@ -21,3 +21,5 @@ params:
   star:
     overhang: 149
     limitGenomeGenerateRAM: 300647710720
+  concoct:
+    maxClusters: 4000
