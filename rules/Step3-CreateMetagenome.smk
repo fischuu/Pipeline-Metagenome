@@ -30,7 +30,7 @@ rule create_index_bowtie2:
     input:
         "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]) 
     output:
-        dir="%s/MEGAHIT/bowtie2Index/" % (config["project-folder"])
+        "%s/MEGAHIT/final.contigs.fa.1.bt2" % (config["project-folder"])
     log:
         "%s/logs/create_index_bowtie2.log" % (config["project-folder"])
     benchmark:
@@ -44,7 +44,7 @@ rule create_index_bowtie2:
 
     # WARNING, THIS CREATES THE WRONG OUTPUT!! IT SHOULD CREATE bt2mega.* , BUT IT CREATES ONLY .* FILES!!!!
     
-        bowtie2-build --threads {threads} {input} {output.dir} &> {log}
+        bowtie2-build --threads {threads} {input} final.contigs.fa &> {log}
     """
     
 rule map_data_metagenome_bowtie2:
@@ -54,7 +54,7 @@ rule map_data_metagenome_bowtie2:
     input:
         R1="%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]),
         R2="%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]),
-        index="%s/MEGAHIT/bowtie2Index/" % (config["project-folder"])
+        index="%s/MEGAHIT/final.contigs.fa.1.bt2" % (config["project-folder"])
     output:
         bam="%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"])
     log:
@@ -62,7 +62,7 @@ rule map_data_metagenome_bowtie2:
     benchmark:
         "%s/benchmark/map_data_metagenome_bowtie2.{samples}.benchmark.tsv" % (config["project-folder"])
     params:
-        index="%s/MEGAHIT/bowtie2Index/bt2mega" % (config["project-folder"]),
+        index="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
     singularity: config["singularity"]["bowtie2"]
     resources:
         time=cluster["map_data_metagenome_bowtie2"]["time"],

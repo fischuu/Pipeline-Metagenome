@@ -81,11 +81,13 @@ def aggregate_eggnog_search(wildcards):
 
 rule aggregate_eggnog:
     input:
-        aggregate_inputMasterMatrix
+        aggregate_eggnog_search
     output:
-        "%s/FASTQ/TRIMMED/GSC.MasterMatrix.txt" % (config["project-folder"])
+        "%s/PRODIGAL/input_file.emapper.seed_orthologs" % (config["project-folder"])
+    log:
+        "%s/logs/concatenate.homologs.log" % (config["project-folder"])
     benchmark:
-        "%s/benchmark/aggregate_MasterMatrix.tsv" % (config["project-folder"])
+        "%s/benchmark/concatenate_homologs.benchmark.tsv" % (config["project-folder"])
     shell:"""
-        cat {input} > {output}
-    """    
+       cat {input} > {output}
+    """

@@ -8,8 +8,8 @@ min_version("6.0")
 ##### Snakemake Metagenomics pipeline #####
 ##### Daniel Fischer (daniel.fischer@luke.fi)
 ##### Natural Resources Institute Finland (Luke)
-##### Version: 0.1.3
-version = "0.1.3"
+##### Version: 0.1.4
+version = "0.1.4"
 
 
 ##### sample sheets #####
