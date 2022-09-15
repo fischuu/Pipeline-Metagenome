@@ -3,4 +3,4 @@ awk -v size=$1 -v pre=$2 -v pad=7 '
      { print >> fname }
 ' $3
 
-find $2* | 's#.*/##' > $2.txt
+#find $2* | 's#.*/##' > $2.txt

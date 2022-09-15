@@ -75,6 +75,12 @@ map_data_metagenome_bowtie2:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
+samToBam_data_metagenome:
+    job-name: samToBam_data_metagenome
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1
+    
 # Step 4 -
 ################################################################################
 prodigal_gene_prediction:
@@ -89,8 +95,15 @@ cut_prodigal_bash:
     mem-per-cpu: 16000
     cpus-per-task: 1
 
+prepare_eggnog_database:
+    job-name: prepare_eggnog_database
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+    
 eggnog_find_homology_parallel:
     job-name: eggnog_find_homology_parallel
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    nvme: 180

@@ -21,12 +21,3 @@ params:
   star:
     overhang: 149
     limitGenomeGenerateRAM: 300647710720
-singularity:
-  fastp: "docker://fischuu/fastp:0.20.1"
-  star: "docker://fischuu/star:2.7.5a"
-  wgs: "docker://fischuu/wgs:0.2"
-  r-gbs: "docker://fischuu/r-gbs:4.2.1-0.1"
-  megahit: "docker://fischuu/megahit:1.2.9-0.2"
-  bowtie2: "docker://fischuu/bowtie2:2.4.4-0.1"
-  prodigal: "docker://fischuu/prodigal:2.6.3-0.1"
-  eggnog: "docker://fischuu"

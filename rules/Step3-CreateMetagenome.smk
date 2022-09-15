@@ -36,6 +36,8 @@ rule create_index_bowtie2:
     benchmark:
         "%s/benchmark/create_index_bowtie2.benchmark.tsv" % (config["project-folder"])
     singularity: config["singularity"]["bowtie2"]
+    params:
+        index="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
     resources:
         time=cluster["create_index_bowtie2"]["time"],
         mem=cluster["create_index_bowtie2"]["mem-per-cpu"]
@@ -44,7 +46,7 @@ rule create_index_bowtie2:
 
     # WARNING, THIS CREATES THE WRONG OUTPUT!! IT SHOULD CREATE bt2mega.* , BUT IT CREATES ONLY .* FILES!!!!
     
-        bowtie2-build --threads {threads} {input} final.contigs.fa &> {log}
+        bowtie2-build --threads {threads} {input} {params.index} &> {log}
     """
     
 rule map_data_metagenome_bowtie2:
@@ -56,7 +58,7 @@ rule map_data_metagenome_bowtie2:
         R2="%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]),
         index="%s/MEGAHIT/final.contigs.fa.1.bt2" % (config["project-folder"])
     output:
-        bam="%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"])
+        temp("%s/BAM/megahit/{samples}_mega.sam" % (config["project-folder"]))
     log:
         "%s/logs/map_data_metagenome_bowtie2.{samples}.log" % (config["project-folder"])
     benchmark:
@@ -69,9 +71,32 @@ rule map_data_metagenome_bowtie2:
         mem=cluster["map_data_metagenome_bowtie2"]["mem-per-cpu"]
     threads: cluster["map_data_metagenome_bowtie2"]["cpus-per-task"]
     shell:"""
-        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} | samtools view -bS | samtools sort > {output};
+        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output}
+    """
+    
+rule samToBam_data_metagenome:
+    """
+    Map the data to metagenome(BOWTIE 2).
+    """
+    input:
+        "%s/BAM/megahit/{samples}_mega.sam" % (config["project-folder"])    
+    output:
+        "%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"])
+    log:
+        "%s/logs/samToBam_data_metagenome.{samples}.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/samToBam_data_metagenome.{samples}.benchmark.tsv" % (config["project-folder"])
+    params:
+        index="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
+    singularity: config["singularity"]["samtools"]
+    resources:
+        time=cluster["samToBam_data_metagenome"]["time"],
+        mem=cluster["samToBam_data_metagenome"]["mem-per-cpu"]
+    threads: cluster["samToBam_data_metagenome"]["cpus-per-task"]
+    shell:"""
+        samtools view -bS {input} | samtools sort > {output};
         
-        samtools index {output.bam}
+        samtools index {output}
         
         # There might be a timestamp issue for the downstream analysis, if so, run a touch *.bai on that folder before the problematic rule.
     """

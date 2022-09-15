@@ -13,7 +13,7 @@ snakemake -s ~/git/Pipeline-Metagenome/Snakefile-Pipeline-Metagenome.smk \
 snakemake -s ~/git/Pipeline-Metagenome/Snakefile-Pipeline-Metagenome.smk \
           -j 300 \
           --use-singularity \
-          --singularity-args "-B /scratch:/scratch" \
+          --singularity-args "-B /scratch:/scratch,/run:/run" \
           --configfile /scratch/project_XXX/Pipeline-WGS_config.yaml \
           --latency-wait 60 \
           --cluster-config ~/git/Pipeline-Metagenome/Pipeline-Metagenome_server_config.yaml \

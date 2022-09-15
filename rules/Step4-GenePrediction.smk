@@ -33,6 +33,7 @@ checkpoint cut_prodigal_bash:
         directory("%s/PRODIGAL/Chunks/" % (config["project-folder"]))
     params:
         out="%s/PRODIGAL/Chunks/final.contigs.prodigal.chunk" % (config["project-folder"]),
+        folder=config["pipeline-folder"],
         split=1000000
     log:
         "%s/logs/cut_prodigal_bash.log" % (config["project-folder"])
@@ -43,7 +44,28 @@ checkpoint cut_prodigal_bash:
         mem=cluster["cut_prodigal_bash"]["mem-per-cpu"]
     threads: cluster["cut_prodigal_bash"]["cpus-per-task"]
     shell:"""
-       ./scripts/cutProdigal.sh {params.split} {params.pre} {input}
+       mkdir -p {output}
+       {params.folder}/scripts/cutProdigal.sh {params.split} {params.out} {input}
+    """
+
+rule prepare_eggnog_database:
+    """
+    Prepare the database for eggnog (EGGNOG).
+    """
+    output:
+        directory("%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]))
+    log:
+        "%s/logs/prepare_eggnog_database.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/prepare_eggnog_database.tsv" % (config["project-folder"])
+    resources:
+        time=cluster["prepare_eggnog_database"]["time"],
+        mem=cluster["prepare_eggnog_database"]["mem-per-cpu"]
+    threads: cluster["prepare_eggnog_database"]["cpus-per-task"]
+    singularity: config["singularity"]["eggnog"]
+    shell:""" 
+         mkdir -p {output}
+         download_eggnog_data.py -y --data_dir {output}  &> {log};
     """
 
 rule eggnog_find_homology_parallel:
@@ -51,7 +73,8 @@ rule eggnog_find_homology_parallel:
     Find homolog genes in data (EGGNOG).
     """
     input:
-        "%s/PRODIGAL/Chunks/final.contigs.prodigal.chunk.{i}" % (config["project-folder"])
+        folder="%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
+        files="%s/PRODIGAL/Chunks/final.contigs.prodigal.chunk.{i}" % (config["project-folder"])
     output:
         "%s/PRODIGAL/Chunks/{i}.emapper.seed_orthologs" % (config["project-folder"])
     log:
@@ -60,7 +83,8 @@ rule eggnog_find_homology_parallel:
         "%s/benchmark/eggnog_find_homology_parallel.{i}.tsv" % (config["project-folder"])
     params:
         tmp=config["local-scratch"],
-        fa="tools/eggnog-mapper/data/eggnog*"
+        fa="%s/PRODIGAL/EGGNOG-DATA/eggnog*" % (config["project-folder"]),
+        out="%s/PRODIGAL/Chunks/" % (config["project-folder"])
     resources:
         time=cluster["eggnog_find_homology_parallel"]["time"],
         mem=cluster["eggnog_find_homology_parallel"]["mem-per-cpu"]
@@ -68,7 +92,7 @@ rule eggnog_find_homology_parallel:
     singularity: config["singularity"]["eggnog"]
     shell:""" 
          cp {params.fa} {params.tmp}  &>> {log};
-         emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input} -o {input}  &>> {log};
+         emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input.files} -o {params.out}  &>> {log};
     """
     
 def aggregate_eggnog_search(wildcards):

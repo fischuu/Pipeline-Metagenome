@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.1.2
-version = "0.1.2"
+##### Version: 0.1.4
+version = "0.1.4"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -87,6 +87,17 @@ def merge_r2_reads(wildcards):
       out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R2.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
     return out
 
+##### Define the required docker images #####
+config["singularity"] = {}
+config["singularity"]["samtools"] = "docker://fischuu/samtools:1.9-0.2"
+config["singularity"]["fastp"] = "docker://fischuu/fastp:0.20.1"
+config["singularity"]["star"] = "docker://fischuu/star:2.7.5a"
+config["singularity"]["wgs"] = "docker://fischuu/wgs:0.2"
+config["singularity"]["r-gbs"] = "docker://fischuu/r-gbs:4.2.1-0.1"
+config["singularity"]["megahit"] = "docker://fischuu/megahit:1.2.9-0.2"
+config["singularity"]["bowtie2"] = "docker://fischuu/bowtie2:2.4.4-0.1"
+config["singularity"]["prodigal"] = "docker://fischuu/prodigal:2.6.3-0.1"
+config["singularity"]["eggnog"] = "docker://fischuu/eggnog:latest"
 
 ##### Deriving runtime paramteres ######
 
@@ -100,10 +111,20 @@ print("##### Number of rawsamples : "+str(len(rawsamples)))
 print("##### Number of samples    : "+str(len(samples)))
 print("##### Rawdata folder       : "+config["rawdata-folder"])
 print("##### Project folder       : "+config["project-folder"])
-print("##### Contamination folder :" +config["contamination-folder"])
+print("##### Contamination folder : " +config["contamination-folder"])
 #print("##### Contamination refs   :" +config["contamination-refs"])
 print("#####")
-
+print("##### Singularity configuration")
+print("##### --------------------------------")
+print("##### samtools       : "+config["singularity"]["samtools"])
+print("##### fastp          : "+config["singularity"]["fastp"])
+print("##### star           : "+config["singularity"]["star"])
+print("##### wgs            : "+config["singularity"]["wgs"])
+print("##### r-gbs          : "+config["singularity"]["r-gbs"])
+print("##### megahit        : "+config["singularity"]["megahit"])
+print("##### bowtie2        : "+config["singularity"]["bowtie2"])
+print("##### prodigal       : "+config["singularity"]["prodigal"])
+print("##### eggnog         : "+config["singularity"]["eggnog"])
 ##### run complete pipeline #####
 
 rule all:
@@ -112,7 +133,10 @@ rule all:
       "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"]),
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
       expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
-      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"])
+      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
+      "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
+      "%s/PRODIGAL/input_file.emapper.seed_orthologs" % (config["project-folder"])
+
 
 rule preparations:
     input:
