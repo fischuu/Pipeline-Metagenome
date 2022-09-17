@@ -147,8 +147,8 @@ rule all:
       "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
       "%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"]),
       "%s/CONCOCT/coverage_table_2k.tsv" % (config["project-folder"]),
-      "%s/CONCOCT/clustering_gt1000_1k.csv" % (config["project-folder"]),
-      "%s/CONCOCT/clustering_gt1000_2k.csv" % (config["project-folder"]),
+      "%s/CONCOCT/1k_clustering_gt1000.csv" % (config["project-folder"]),
+      "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"]),
       "%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]),
       "%s/CONCOCT/fasta_bins_2k" % (config["project-folder"])
 

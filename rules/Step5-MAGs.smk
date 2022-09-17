@@ -194,17 +194,17 @@ rule run_concoct_1k:
         fa="%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
         coverage="%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/clustering_gt1000_1k.csv" % (config["project-folder"])
+        "%s/CONCOCT/1k_clustering_gt1000.csv" % (config["project-folder"])
     log:
         "%s/logs/run_concoct_1k.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/run_concoct_1k.tsv" % (config["project-folder"])
     resources:
-        time=cluster["run_concoct"]["time"],
-        mem=cluster["run_concoct"]["mem-per-cpu"]
-    threads: cluster["run_concoct"]["cpus-per-task"]
+        time=cluster["run_concoct_1k"]["time"],
+        mem=cluster["run_concoct_1k"]["mem-per-cpu"]
+    threads: cluster["run_concoct_1k"]["cpus-per-task"]
     params:
-       outFolder=directory("%s/CONCOCT/" % (config["project-folder"])),
+       outFolder=directory("%s/CONCOCT/1k" % (config["project-folder"])),
        maxClusters=config["params"]["concoct"]["maxClusters"]
     singularity: config["singularity"]["concoct"]
     shell:"""
@@ -219,17 +219,17 @@ rule run_concoct_2k:
         fa="%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
         coverage="%s/CONCOCT/coverage_table_2k.tsv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/clustering_gt1000_2k.csv" % (config["project-folder"])
+        "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"])
     log:
         "%s/logs/run_concoct_2k.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/run_concoct_2k.tsv" % (config["project-folder"])
     resources:
-        time=cluster["run_concoct"]["time"],
-        mem=cluster["run_concoct"]["mem-per-cpu"]
-    threads: cluster["run_concoct"]["cpus-per-task"]
+        time=cluster["run_concoct_2k"]["time"],
+        mem=cluster["run_concoct_2k"]["mem-per-cpu"]
+    threads: cluster["run_concoct_2k"]["cpus-per-task"]
     params:
-       outFolder=directory("%s/CONCOCT/" % (config["project-folder"])),
+       outFolder=directory("%s/CONCOCT/2k" % (config["project-folder"])),
        maxClusters=config["params"]["concoct"]["maxClusters"]
     singularity: config["singularity"]["concoct"]
     shell:"""
@@ -241,16 +241,16 @@ rule merge_cutup_concoct_1k:
     Merge cutup (CONCOCT).
     """
     input:
-        "%s/CONCOCT/clustering_gt1000_1k.csv" % (config["project-folder"])
+        "%s/CONCOCT/1k_clustering_gt1000.csv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/clustering_merged_1k.csv" % (config["project-folder"])
+        "%s/CONCOCT/1k_clustering_merged.csv" % (config["project-folder"])
     log:
         "%s/logs/merge_cutup_concoct_1k.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/merge_cutup_concoct_1k.tsv" % (config["project-folder"])
-    threads: 1
+    singularity: config["singularity"]["concoct"]
     shell:"""
-      merge_cutup_clustering.py {input} > {output}
+      merge_cutup_clustering.py {input} > {output} 2> {log}
     """
     
 rule merge_cutup_concoct_2k:
@@ -258,16 +258,16 @@ rule merge_cutup_concoct_2k:
     Merge cutup (CONCOCT).
     """
     input:
-        "%s/CONCOCT/clustering_gt1000_2k.csv" % (config["project-folder"])
+        "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/clustering_merged_2k.csv" % (config["project-folder"])
+        "%s/CONCOCT/2k_clustering_merged.csv" % (config["project-folder"])
     log:
         "%s/logs/merge_cutup_concoct_2k.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/merge_cutup_concoct_2k.tsv" % (config["project-folder"])
-    threads: 1
+    singularity: config["singularity"]["concoct"]
     shell:"""
-      merge_cutup_clustering.py {input} > {output}
+      merge_cutup_clustering.py {input} > {output} 2> {log}
     """
     
 rule extract_fasta_concoct_1k:
@@ -276,7 +276,7 @@ rule extract_fasta_concoct_1k:
     """
     input:
         fa="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
-        csv="%s/CONCOCT/clustering_merged_1k.csv" % (config["project-folder"])
+        csv="%s/CONCOCT/1k_clustering_merged.csv" % (config["project-folder"])
     output:
         directory("%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]))
     log:
@@ -284,7 +284,8 @@ rule extract_fasta_concoct_1k:
     benchmark:
         "%s/benchmark/extract_fasta_concoct_1k.tsv" % (config["project-folder"])
     params:
-      out=directory("%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]))
+        out=directory("%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]))
+    singularity: config["singularity"]["concoct"]
     shell:"""
       mkdir -p {params.out}
       
@@ -298,7 +299,7 @@ rule extract_fasta_concoct_2k:
     """
     input:
         fa="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
-        csv="%s/CONCOCT/clustering_merged_2k.csv" % (config["project-folder"])
+        csv="%s/CONCOCT/2k_clustering_merged.csv" % (config["project-folder"])
     output:
         directory("%s/CONCOCT/fasta_bins_2k" % (config["project-folder"]))
     log:
@@ -306,7 +307,8 @@ rule extract_fasta_concoct_2k:
     benchmark:
         "%s/benchmark/extract_fasta_concoct_2k.tsv" % (config["project-folder"])
     params:
-      out=directory("%s/CONCOCT/fasta_bins_2k" % (config["project-folder"]))
+        out=directory("%s/CONCOCT/fasta_bins_2k" % (config["project-folder"]))
+    singularity: config["singularity"]["concoct"]
     shell:"""
       mkdir -p {params.out}
       
