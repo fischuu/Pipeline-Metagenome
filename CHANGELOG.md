@@ -7,9 +7,12 @@
 #### PLANNED UPDATES FOR FUTURE VERSIONS
 
 #### UPDATES
+Release version 0.2!
+--------------------------------------------------------------------------------
 
 Development version 0.1.*:
 --------------------------------------------------------------------------------
+16: Default resource allocations adjusted for avoid crashes
 15: rule extract_fasta_concoct for 1k and 2k added
 14: rule run_concoct added for 1k and 2k
 13: rule cut_filtered_contigs_concoct added
