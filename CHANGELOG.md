@@ -7,6 +7,10 @@
 #### PLANNED UPDATES FOR FUTURE VERSIONS
 
 #### UPDATES
+Development version 0.3.*:
+--------------------------------------------------------------------------------
+1: Inital submission
+
 Release version 0.2!
 --------------------------------------------------------------------------------
 
