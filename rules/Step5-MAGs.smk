@@ -4,7 +4,7 @@ rule cut_filtered_contigs_concoct:
     """
     input:
         con1k="%s/MEGAHIT/final.contigs.1k.fa" % (config["project-folder"]),
-        con2k="%s/MEGAHIT/final.contigs.1k.fa" % (config["project-folder"])
+        con2k="%s/MEGAHIT/final.contigs.2k.fa" % (config["project-folder"])
     output:
         bed1k="%s/CONCOCT/final.contigs.1k_10K.bed" % (config["project-folder"]),
         fa1k="%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),

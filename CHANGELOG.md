@@ -9,6 +9,7 @@
 #### UPDATES
 Development version 0.3.*:
 --------------------------------------------------------------------------------
+2: Critical bugfix, 2k concoct calculations were done with 1k output
 1: Inital submission
 
 Release version 0.2!
