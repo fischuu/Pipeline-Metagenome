@@ -54,7 +54,7 @@ rule create_index_bowtie2:
     input:
         "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]) 
     output:
-        "%s/MEGAHIT/final.contigs.fa.1.bt2" % (config["project-folder"])
+        "%s/MEGAHIT/final.contigs.fa.1.bt2l" % (config["project-folder"])
     log:
         "%s/logs/create_index_bowtie2.log" % (config["project-folder"])
     benchmark:
@@ -80,7 +80,7 @@ rule map_data_metagenome_bowtie2:
     input:
         R1="%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]),
         R2="%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]),
-        index="%s/MEGAHIT/final.contigs.fa.1.bt2" % (config["project-folder"])
+        index="%s/MEGAHIT/final.contigs.fa.1.bt2l" % (config["project-folder"])
     output:
         temp("%s/BAM/megahit/{samples}_mega.sam" % (config["project-folder"]))
     log:

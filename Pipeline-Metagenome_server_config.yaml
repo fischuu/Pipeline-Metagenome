@@ -39,7 +39,7 @@ star_map_reads_host:
 
 concatenate_inputfiles_cat:
     job-name:  concatenate_inputfiles_cat
-    time: 04:00:00
+    time: 2-00:00:00
     mem-per-cpu: 64000
     cpus-per-task: 1
 
@@ -59,9 +59,10 @@ star_decontaminate_reads:
 ################################################################################
 assemble_contigs_megahit:
     job-name: assemble_contigs_megahit
-    time: 04:00:00
-    mem-per-cpu: 4000
+    time: 14-00:00:00
+    mem-per-cpu: 60000
     cpus-per-task: 20
+    partition: hugemem_longrun
 
 filter_length_megahit:
     job-name: filter_length_megahit

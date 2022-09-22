@@ -73,7 +73,12 @@ rule concatenate_inputfiles_cat:
         mem=cluster["concatenate_inputfiles_cat"]["mem-per-cpu"]
     threads: cluster["concatenate_inputfiles_cat"]["cpus-per-task"]
     shell:"""
-       zcat {input.r1} | gzip -c > {output.r1};
-       zcat {input.r2} | gzip -c > {output.r2};
+       # In case the other approach crashes, bring it back to this way
+       #zcat {input.r1} | gzip -c > {output.r1};
+       #zcat {input.r2} | gzip -c > {output.r2};
+
+       cat {input.r1} > {output.r1};
+       cat {input.r2} > {output.r2};
+
     """
 
