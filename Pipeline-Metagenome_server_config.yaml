@@ -142,6 +142,19 @@ process_covTable_bed_parallel:
     mem-per-cpu: 16000
     cpus-per-task: 1
     
+
+process_covTable_bed_parallel_1k:
+    job-name: process_covTable_bed_parallel_1k
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+
+process_covTable_bed_parallel_2k:
+    job-name: process_covTable_bed_parallel_2k
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+
 run_concoct_1k:
     job-name: run_concoct_1k
     time: 04:00:00

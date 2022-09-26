@@ -9,7 +9,7 @@
 #### UPDATES
 Development version 0.3.*:
 --------------------------------------------------------------------------------
-3: Changed the bowtie2 index filename due to some error
+3: Adjusted the defaults resources for concoct parts 1k and 2k
 2: Critical bugfix, 2k concoct calculations were done with 1k output
 1: Inital submission
 
