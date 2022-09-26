@@ -92,7 +92,7 @@ samToBam_data_metagenome:
 ################################################################################
 prodigal_gene_prediction:
     job-name: prodigal_gene_prediction
-    time: 04:00:00
+    time: 1-00:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
 
@@ -146,13 +146,13 @@ process_covTable_bed_parallel:
 process_covTable_bed_parallel_1k:
     job-name: process_covTable_bed_parallel_1k
     time: 04:00:00
-    mem-per-cpu: 16000
+    mem-per-cpu: 192000
     cpus-per-task: 1
 
 process_covTable_bed_parallel_2k:
     job-name: process_covTable_bed_parallel_2k
     time: 04:00:00
-    mem-per-cpu: 16000
+    mem-per-cpu: 192000
     cpus-per-task: 1
 
 run_concoct_1k:
