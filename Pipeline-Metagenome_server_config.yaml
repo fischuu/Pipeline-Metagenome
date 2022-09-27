@@ -157,14 +157,16 @@ process_covTable_bed_parallel_2k:
 
 run_concoct_1k:
     job-name: run_concoct_1k
-    time: 04:00:00
-    mem-per-cpu: 4000
+    partition: longrun
+    time: 6-00:00:00
+    mem-per-cpu: 8000
     cpus-per-task: 40
     
 run_concoct_2k:
     job-name: run_concoct_2k
-    time: 04:00:00
-    mem-per-cpu: 4000
+    partition: longrun
+    time: 6-00:00:00
+    mem-per-cpu: 8000
     cpus-per-task: 40
     
 extract_fasta_concoct_1k:
