@@ -171,13 +171,13 @@ run_concoct_2k:
     
 extract_fasta_concoct_1k:
     job-name: extract_fasta_concoct_1k
-    time: 04:00:00
-    mem-per-cpu: 32000
+    time: 0-10:00:00
+    mem-per-cpu: 84000
     cpus-per-task: 1
     
 extract_fasta_concoct_2k:
     job-name: extract_fasta_concoct_2k
-    time: 04:00:00
-    mem-per-cpu: 32000
+    time: 0-10:00:00
+    mem-per-cpu: 84000
     cpus-per-task: 1    
     
