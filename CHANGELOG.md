@@ -3,6 +3,7 @@
 ## PLANNED UPDATES FOR FUTURE VERSIONS
 
 ## UPDATES
+
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
 4. MEGAHIT_temp folder is now temporary only, to save tons of disc space
@@ -10,7 +11,7 @@
 2. Critical bugfix, 2k concoct calculations were done with 1k output
 1. Inital submission
 
-### Release version 0.2!
+### Release version 0.2, includes all changes from dev version 0.1.*
 --------------------------------------------------------------------------------
 
 ### Development version 0.1.*:
