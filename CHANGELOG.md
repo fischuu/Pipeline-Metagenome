@@ -1,23 +1,19 @@
-################################################################################
-#####                                                                      #####
-#####                         CHANGELOG                                    #####
-#####                                                                      #####
-################################################################################
+# CHANGELOG
 
-#### PLANNED UPDATES FOR FUTURE VERSIONS
+## PLANNED UPDATES FOR FUTURE VERSIONS
 
-#### UPDATES
-Development version 0.3.*:
+## UPDATES
+### Development version 0.3.*:
 --------------------------------------------------------------------------------
 4. MEGAHIT_temp folder is now temporary only, to save tons of disc space
 3. Adjusted the defaults resources for concoct parts 1k and 2k
 2. Critical bugfix, 2k concoct calculations were done with 1k output
 1. Inital submission
 
-Release version 0.2!
+### Release version 0.2!
 --------------------------------------------------------------------------------
 
-Development version 0.1.*:
+### Development version 0.1.*:
 --------------------------------------------------------------------------------
 16: Default resource allocations adjusted for avoid crashes
 15: rule extract_fasta_concoct for 1k and 2k added
