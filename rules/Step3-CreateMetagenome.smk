@@ -6,7 +6,7 @@ rule assemble_contigs_megahit:
         r1="%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
         r2="%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"])
     output:
-        temp_dir=directory("%s/MEGAHIT_temp" % (config["project-folder"])),
+        temp_dir=temp(directory("%s/MEGAHIT_temp" % (config["project-folder"]))),
         contigs="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
     log:
         "%s/logs/assemble_contigs_megahit.log" % (config["project-folder"])
@@ -18,7 +18,7 @@ rule assemble_contigs_megahit:
         mem=cluster["assemble_contigs_megahit"]["mem-per-cpu"]
     threads: cluster["assemble_contigs_megahit"]["cpus-per-task"]
     shell:"""
-        megahit -1 {input.r1}  -2 {input.r2}  --keep-tmp-files -t {threads}  -o {output.temp_dir} &> {log};
+        megahit -1 {input.r1}  -2 {input.r2} -t {threads}  -o {output.temp_dir} &> {log};
         
         mv {output.temp_dir}/final.contigs.fa {output.contigs};
     """

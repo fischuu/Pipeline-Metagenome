@@ -9,6 +9,7 @@
 #### UPDATES
 Development version 0.3.*:
 --------------------------------------------------------------------------------
+4: MEGAHIT_temp folder is now temporary only, to save tons of disc space
 3: Adjusted the defaults resources for concoct parts 1k and 2k
 2: Critical bugfix, 2k concoct calculations were done with 1k output
 1: Inital submission

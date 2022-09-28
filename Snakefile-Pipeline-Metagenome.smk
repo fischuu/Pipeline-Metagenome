@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.3
-version = "0.3.3"
+##### Version: 0.3.4
+version = "0.3.4"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
