@@ -165,8 +165,8 @@ rule fastqc_quality_control_trimmed_data:
         R1="%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]),
         R2="%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"])
     output:
-        R1="%s/QC/TRIMMED/{samples}.R1.trimmed_fastqc.zip" % (config["project-folder"]),
-        R2="%s/QC/TRIMMED/{samples}.R2.trimmed_fastqc.zip" % (config["project-folder"])
+        R1="%s/QC/TRIMMED/{samples}_R1.trimmed_fastqc.zip" % (config["project-folder"]),
+        R2="%s/QC/TRIMMED/{samples}_R2.trimmed_fastqc.zip" % (config["project-folder"])
     log:
         R1="%s/logs/fastqc_quality_control_trimmed_data_R1.{samples}.log" % (config["project-folder"]),
         R2="%s/logs/fastqc_quality_control_trimmed_data_R2.{samples}.log" % (config["project-folder"])
@@ -190,8 +190,8 @@ rule multiqc_quality_control_trimmed_data:
     Quality control of trimmed fastq files(MULTIQC).
     """
     input:
-        R1=expand("%s/QC/TRIMMED/{samples}.R1.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
-        R2=expand("%s/QC/TRIMMED/{samples}.R2.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
+        R1=expand("%s/QC/TRIMMED/{samples}_R1.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
+        R2=expand("%s/QC/TRIMMED/{samples}_R2.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
         #R1="%s/QC/TRIMMED/*.R1_fastqc.zip" % (config["project-folder"]),
         #R2="%s/QC/TRIMMED/*.R2_fastqc.zip" % (config["project-folder"])
     output:
