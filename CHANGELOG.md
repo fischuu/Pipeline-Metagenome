@@ -6,6 +6,10 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+7: Added the QC (FastQC and MultiQC) for the Raw samples and concatenated as well as trimmed ones
+
+6: Example start and config files copy+paste error fixed
+
 5: More adjustments to the default resource allocations (extract_fasta_concoct_1k and extract_fasta_concoct_2k)
 
 4: MEGAHIT_temp folder is now temporary only, to save tons of disc space

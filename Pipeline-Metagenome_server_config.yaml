@@ -55,6 +55,45 @@ star_decontaminate_reads:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
+# Step 2c - QC
+################################################################################
+fastqc_quality_control_raw_data_r1:
+    job-name: fastqc_quality_control_raw_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+multiqc_quality_control_raw_data_r1:
+    job-name: multiqc_quality_control_raw_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+    
+fastqc_quality_control_concatenated_data_r1:
+    job-name: fastqc_quality_control_concatenated_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+multiqc_quality_control_concatenated_data_r1:
+    job-name: multiqc_quality_control_concatenated_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
+fastqc_quality_control_trimmed_data_r1:
+    job-name: fastqc_quality_control_trimmed_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+multiqc_quality_control_trimmed_data_r1:
+    job-name: multiqc_quality_control_trimmed_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
+
 # Step 3 - 
 ################################################################################
 assemble_contigs_megahit:

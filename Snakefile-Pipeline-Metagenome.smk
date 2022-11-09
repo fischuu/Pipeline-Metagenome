@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.5
-version = "0.3.5"
+##### Version: 0.3.7
+version = "0.3.7"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -57,6 +57,28 @@ if config["contamination-folder"] != "":
   if config["contamination-folder"][-1] == '/':
      config["contamination-folder"]=config["contamination-folder"][:-1]
 
+# Get the basename fastq inputs
+possible_ext = [".fastq", ".fq.gz", ".fastq.gz", ".fasta", ".fa", ".fa.gz", ".fasta.gz"]
+ext = ".null"
+
+reads1_tmp = list(samplesheet.read1)
+reads1_trim = []
+for r in reads1_tmp:
+    for e in possible_ext:
+        if r.endswith(e):
+            addThis = r[:-len(e)]
+            reads1_trim += [addThis]
+            ext=e
+
+reads2_tmp = list(samplesheet.read2)
+reads2_trim = []
+for r in reads2_tmp:
+    for e in possible_ext:
+        if r.endswith(e):
+            addThis = r[:-len(e)]
+            reads2_trim += [addThis] 
+            ext=e
+
 ##### input function definitions ######
 
 def get_fastq_for_concatenating_read1(wildcards):
@@ -87,6 +109,28 @@ def merge_r2_reads(wildcards):
       out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R2.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
     return out
 
+def get_raw_input_read_bs1(wildcards):
+    reads = wildcards.reads1 + ext
+    output = config["rawdata-folder"] + reads
+    return output
+
+def get_raw_input_read_bs2(wildcards):
+    reads = wildcards.reads2 + ext
+    output = config["rawdata-folder"] + reads
+    return output
+
+def get_raw_input_read1(wildcards):
+    reads = samplesheet.loc[wildcards.rawsamples][["read1"]]
+    path = config["rawdata-folder"]
+    output = [path + x for x in reads]
+    return output
+
+def get_raw_input_read2(wildcards):
+    reads = samplesheet.loc[wildcards.rawsamples][["read2"]]
+    path = config["rawdata-folder"]
+    output = [path + x for x in reads]
+    return output
+
 ##### Define the required docker images #####
 config["singularity"] = {}
 config["singularity"]["samtools"] = "docker://fischuu/samtools:1.9-0.2"
@@ -100,6 +144,7 @@ config["singularity"]["prodigal"] = "docker://fischuu/prodigal:2.6.3-0.1"
 config["singularity"]["eggnog"] = "docker://fischuu/eggnog:latest"
 config["singularity"]["subread"] = "docker://fischuu/subread:2.0.1-0.1"
 config["singularity"]["concoct"] = "docker://nanozoo/concoct:latest"
+config["singularity"]["gbs"] = "docker://fischuu/gbs:0.2"
 
 ##### Deriving runtime paramteres ######
 
@@ -154,17 +199,16 @@ rule all:
 
 rule preparations:
     input:
+        expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
 
-rule trimming:
-    input:
-      expand("%s/BAM/{samples}.bam" % (config["project-folder"]), samples=samples)
-      
 rule qc:
     input:
-      expand("%s/QC/RAW/{rawsamples}_R1_001_fastqc.zip" % (config["project-folder"]), rawsamples=rawsamples),
-      expand("%s/QC/RAW/{rawsamples}_R2_001_fastqc.zip" % (config["project-folder"]), rawsamples=rawsamples),
-      expand("%s/QC/TRIMMED/{rawsamples}_R1_fastqc.zip" % (config["project-folder"]), rawsamples=rawsamples),
-      expand("%s/QC/TRIMMED/{rawsamples}_R2_fastqc.zip" % (config["project-folder"]), rawsamples=rawsamples)
+        "%s/QC/RAW/multiqc_R1/" % (config["project-folder"]),
+        "%s/QC/CONCATENATED/multiqc_R1/" % (config["project-folder"]),
+        "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
+        expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
+        expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
 
 rule alignment:
     input:
@@ -176,6 +220,7 @@ report: "report/workflow.rst"
 include: "rules/Step1-Preparations.smk"
 include: "rules/Step2-ReadProcessing.smk"
 include: "rules/Step2b-Decontamination.smk"
+include: "rules/Step2c-QC.smk"
 include: "rules/Step3-CreateMetagenome.smk"
 include: "rules/Step4-GenePrediction.smk"
 include: "rules/Step5-MAGs.smk"
