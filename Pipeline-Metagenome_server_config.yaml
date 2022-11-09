@@ -75,14 +75,14 @@ qualDist_raw_data:
     mem-per-cpu: 12000
     cpus-per-task: 1
     
-fastqc_quality_control_concatenated_data_r1:
-    job-name: fastqc_quality_control_concatenated_data_r1
+fastqc_quality_control_concatenated_data:
+    job-name: fastqc_quality_control_concatenated_data
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     
-multiqc_quality_control_concatenated_data_r1:
-    job-name: multiqc_quality_control_concatenated_data_r1
+multiqc_quality_control_concatenated_data:
+    job-name: multiqc_quality_control_concatenated_data
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 1
@@ -93,14 +93,14 @@ qualDist_concatenated_data:
     mem-per-cpu: 12000
     cpus-per-task: 1
 
-fastqc_quality_control_trimmed_data_r1:
-    job-name: fastqc_quality_control_trimmed_data_r1
+fastqc_quality_control_trimmed_data:
+    job-name: fastqc_quality_control_trimmed_data
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     
-multiqc_quality_control_trimmed_data_r1:
-    job-name: multiqc_quality_control_trimmed_data_r1
+multiqc_quality_control_trimmed_data:
+    job-name: multiqc_quality_control_trimmed_data
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 1

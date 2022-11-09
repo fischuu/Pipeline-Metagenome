@@ -174,6 +174,7 @@ print("##### bowtie2        : "+config["singularity"]["bowtie2"])
 print("##### prodigal       : "+config["singularity"]["prodigal"])
 print("##### eggnog         : "+config["singularity"]["eggnog"])
 print("##### subread        : "+config["singularity"]["subread"])
+print("##### gbs            : "+config["singularity"]["gbs"])
 
 ##### run complete pipeline #####
 

@@ -88,10 +88,10 @@ rule fastqc_quality_control_concatenated_data:
         R2="%s/logs/fastqc_quality_control_concatenated_data_R2.{samples}.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/fastqc_quality_control_concatenated_data.{samples}.tsv" % (config["project-folder"])
-    threads: cluster["fastqc_quality_control_concatenated_data_r1"]["cpus-per-task"]
+    threads: cluster["fastqc_quality_control_concatenated_data"]["cpus-per-task"]
     resources:
-        time=cluster["fastqc_quality_control_concatenated_data_r1"]["time"],
-        mem=cluster["fastqc_quality_control_concatenated_data_r1"]["mem-per-cpu"]
+        time=cluster["fastqc_quality_control_concatenated_data"]["time"],
+        mem=cluster["fastqc_quality_control_concatenated_data"]["mem-per-cpu"]
     params:
         outfolder="%s/QC/CONCATENATED/" % (config["project-folder"])
     singularity: config["singularity"]["gbs"]
@@ -116,10 +116,10 @@ rule multiqc_quality_control_concatenated_data:
         R2="%s/logs/multiqc_quality_control_concatenated_data_R2.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/multiqc_quality_control_concatenated_data.tsv" % (config["project-folder"])
-    threads: cluster["multiqc_quality_control_concatenated_data_r1"]["cpus-per-task"]
+    threads: cluster["multiqc_quality_control_concatenated_data"]["cpus-per-task"]
     resources:
-        time=cluster["multiqc_quality_control_concatenated_data_r1"]["time"],
-        mem=cluster["multiqc_quality_control_concatenated_data_r1"]["mem-per-cpu"]
+        time=cluster["multiqc_quality_control_concatenated_data"]["time"],
+        mem=cluster["multiqc_quality_control_concatenated_data"]["mem-per-cpu"]
     params:
        R1="%s/QC/CONCATENATED/*_R1_fastqc.zip" % (config["project-folder"]),
        R2="%s/QC/CONCATENATED/*_R2_fastqc.zip" % (config["project-folder"]),
@@ -172,13 +172,12 @@ rule fastqc_quality_control_trimmed_data:
         R2="%s/logs/fastqc_quality_control_trimmed_data_R2.{samples}.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/fastqc_quality_control_trimmed_data.{samples}.tsv" % (config["project-folder"])
-    threads: cluster["fastqc_quality_control_trimmed_data_r1"]["cpus-per-task"]
+    threads: cluster["fastqc_quality_control_trimmed_data"]["cpus-per-task"]
     resources:
-        time=cluster["fastqc_quality_control_trimmed_data_r1"]["time"],
-        mem=cluster["fastqc_quality_control_trimmed_data_r1"]["mem-per-cpu"]
+        time=cluster["fastqc_quality_control_trimmed_data"]["time"],
+        mem=cluster["fastqc_quality_control_trimmed_data"]["mem-per-cpu"]
     params:
         outfolder="%s/QC/TRIMMED/" % (config["project-folder"])
-    conda:"envs/gbs.yaml"
     singularity: config["singularity"]["gbs"]
     shell:"""
         mkdir -p {params.outfolder};
@@ -207,10 +206,10 @@ rule multiqc_quality_control_trimmed_data:
        R1="%s/QC/TRIMMED/*.R1_fastqc.zip" % (config["project-folder"]),
        R2="%s/QC/TRIMMED/*.R2_fastqc.zip" % (config["project-folder"]),
        tmpdir=config["tmpdir"]
-    threads: cluster["multiqc_quality_control_trimmed_data_r1"]["cpus-per-task"]
+    threads: cluster["multiqc_quality_control_trimmed_data"]["cpus-per-task"]
     resources:
-        time=cluster["multiqc_quality_control_trimmed_data_r1"]["time"],
-        mem=cluster["multiqc_quality_control_trimmed_data_r1"]["mem-per-cpu"]
+        time=cluster["multiqc_quality_control_trimmed_data"]["time"],
+        mem=cluster["multiqc_quality_control_trimmed_data"]["mem-per-cpu"]
     singularity: config["singularity"]["gbs"]
     shell:"""
         export TMPDIR={params.tmpdir}
