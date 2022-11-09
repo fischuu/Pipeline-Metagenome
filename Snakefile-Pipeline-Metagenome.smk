@@ -210,6 +210,10 @@ rule qc:
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
         expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
 
+rule decontaminate:
+    input:
+        expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+
 rule alignment:
     input:
 
