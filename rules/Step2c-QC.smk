@@ -191,9 +191,7 @@ rule multiqc_quality_control_trimmed_data:
     """
     input:
         R1=expand("%s/QC/TRIMMED/{samples}_R1.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
-        R2=expand("%s/QC/TRIMMED/{samples}_R2.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples),
-        #R1="%s/QC/TRIMMED/*.R1_fastqc.zip" % (config["project-folder"]),
-        #R2="%s/QC/TRIMMED/*.R2_fastqc.zip" % (config["project-folder"])
+        R2=expand("%s/QC/TRIMMED/{samples}_R2.trimmed_fastqc.zip" % (config["project-folder"]), samples=samples)
     output:
         R1=directory("%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"])),
         R2=directory("%s/QC/TRIMMED/multiqc_R2/" % (config["project-folder"]))
@@ -203,8 +201,8 @@ rule multiqc_quality_control_trimmed_data:
     benchmark:
         "%s/benchmark/multiqc_quality_control_trimmed_data.tsv" % (config["project-folder"])
     params:
-       R1="%s/QC/TRIMMED/*.R1_fastqc.zip" % (config["project-folder"]),
-       R2="%s/QC/TRIMMED/*.R2_fastqc.zip" % (config["project-folder"]),
+       R1="%s/QC/TRIMMED/*_R1.trimmed_fastqc.zip" % (config["project-folder"]),
+       R2="%s/QC/TRIMMED/*_R2.trimmed_fastqc.zip" % (config["project-folder"]),
        tmpdir=config["tmpdir"]
     threads: cluster["multiqc_quality_control_trimmed_data"]["cpus-per-task"]
     resources:
