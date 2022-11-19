@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+8: Group-wise co-assemblies are now also generated
+
 7: Added the QC (FastQC and MultiQC) for the Raw samples and concatenated as well as trimmed ones
 
 6: Example start and config files copy+paste error fixed

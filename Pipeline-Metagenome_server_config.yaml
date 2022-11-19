@@ -51,7 +51,7 @@ build_contamination_indices:
 
 star_decontaminate_reads:
     job-name: star_decontaminate_reads
-    time: 04:00:00
+    time: 1-00:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
 

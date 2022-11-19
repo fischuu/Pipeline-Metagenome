@@ -23,6 +23,31 @@ rule assemble_contigs_megahit:
         mv {output.temp_dir}/final.contigs.fa {output.contigs};
     """
     
+rule assemble_coassembly_contigs_megahit:
+    """
+    Denovo assemble merged reads (MEGAHIT).
+    """
+    input:
+        r1="%s/FASTQ/MERGED/group_{cagroup}_R1.fastq.gz" % (config["project-folder"]),
+        r2="%s/FASTQ/MERGED/group_{cagroup}_R2.fastq.gz" % (config["project-folder"])
+    output:
+        temp_dir=temp(directory("%s/MEGAHIT_temp_{cagroup}" % (config["project-folder"]))),
+        contigs="%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"])
+    log:
+        "%s/logs/assemble_contigs_megahit_group_{cagroup}.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/assemble_contigs_megahit_group_{cagroup}.benchmark.tsv" % (config["project-folder"])
+    singularity: config["singularity"]["megahit"]
+    resources:
+        time=cluster["assemble_contigs_megahit"]["time"],
+        mem=cluster["assemble_contigs_megahit"]["mem-per-cpu"]
+    threads: cluster["assemble_contigs_megahit"]["cpus-per-task"]
+    shell:"""
+        megahit -1 {input.r1}  -2 {input.r2} -t {threads}  -o {output.temp_dir} &> {log};
+        
+        mv {output.temp_dir}/final.contigs.fa {output.contigs};
+    """    
+    
 rule filter_length_megahit:
     """
     Remove short contigs from the megahit output
@@ -124,3 +149,7 @@ rule samToBam_data_metagenome:
         
         # There might be a timestamp issue for the downstream analysis, if so, run a touch *.bai on that folder before the problematic rule.
     """
+
+
+##### Co-assemblies
+################################################################################

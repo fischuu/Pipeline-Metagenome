@@ -82,3 +82,26 @@ rule concatenate_inputfiles_cat:
 
     """
 
+
+rule concatenate_coassemblyfiles_cat:
+    """
+    Concatenate input files (CAT).
+    """
+    input:
+        r1=merge_r1_ca_reads,
+        r2=merge_r2_ca_reads
+    output:
+        r1="%s/FASTQ/MERGED/group_{cagroup}_R1.fastq.gz" % (config["project-folder"]),
+        r2="%s/FASTQ/MERGED/group_{cagroup}_R2.fastq.gz" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/concatenate_coassemblyfiles_cat.{cagroup}.benchmark.tsv" % (config["project-folder"])
+    resources:
+        time=cluster["concatenate_inputfiles_cat"]["time"],
+        mem=cluster["concatenate_inputfiles_cat"]["mem-per-cpu"]
+    threads: cluster["concatenate_inputfiles_cat"]["cpus-per-task"]
+    shell:"""
+       # In case the other approach crashes, bring it back to this way
+       cat {input.r1} > {output.r1};
+       cat {input.r2} > {output.r2};
+
+    """

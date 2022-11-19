@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.7
-version = "0.3.7"
+##### Version: 0.3.8
+version = "0.3.8"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -27,6 +27,7 @@ samplesheet = pd.read_table(config["samplesheet"]).set_index("rawsample", drop=F
 rawsamples=list(samplesheet.rawsample)
 samples=list(set(list(samplesheet.sample_name)))  # Unique list
 lane=list(samplesheet.lane)
+assemblyGroups=list(set(list(samplesheet.assemblyGroup)))  # Unique list
 
 workdir: config["project-folder"]
 
@@ -109,6 +110,22 @@ def merge_r2_reads(wildcards):
       out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R2.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
     return out
 
+def merge_r1_ca_reads(wildcards):
+    samples = samplesheet[samplesheet["assemblyGroup"].astype(int) == int(wildcards.cagroup)]["sample_name"]
+    if config["contamination-folder"] == "":
+      out = expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
+    else:
+      out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+    return out
+
+def merge_r2_ca_reads(wildcards):
+    samples = samplesheet[samplesheet["assemblyGroup"].astype(int) == int(wildcards.cagroup)]["sample_name"]
+    if config["contamination-folder"] == "":
+      out = expand("%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
+    else:
+      out = expand("%s/FASTQ/DECONTAMINATED/{samples}_R2.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+    return out
+
 def get_raw_input_read_bs1(wildcards):
     reads = wildcards.reads1 + ext
     output = config["rawdata-folder"] + reads
@@ -159,6 +176,8 @@ print("##### Number of samples    : "+str(len(samples)))
 print("##### Rawdata folder       : "+config["rawdata-folder"])
 print("##### Project folder       : "+config["project-folder"])
 print("##### Contamination folder : " +config["contamination-folder"])
+print("##### No. of ass. groups   : "+str(len(assemblyGroups)))
+print("##### Assembly groups      : "+str(assemblyGroups))
 #print("##### Contamination refs   :" +config["contamination-refs"])
 print("#####")
 print("##### Singularity configuration")
@@ -209,11 +228,21 @@ rule qc:
         "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
+        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups)
 
 rule decontaminate:
     input:
         expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
+
+rule combineFastq:
+    input:
+        "%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
+        "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"])
+
+rule createMetagenome:
+    input:
+        "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
 
 rule alignment:
     input:
