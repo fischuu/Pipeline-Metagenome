@@ -37,5 +37,5 @@ rule check_group_assembly:
         mem=cluster["check_full_assembly"]["mem-per-cpu"]
     threads: cluster["check_full_assembly"]["cpus-per-task"]
     shell:"""
-        metaquast.py -t {threads} --no-plots -o {output} -1 {input}
+        metaquast.py -t {threads} {input} --no-plots -o {output}
     """
