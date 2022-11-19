@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.8
-version = "0.3.8"
+##### Version: 0.3.9
+version = "0.3.9"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -162,6 +162,7 @@ config["singularity"]["eggnog"] = "docker://fischuu/eggnog:latest"
 config["singularity"]["subread"] = "docker://fischuu/subread:2.0.1-0.1"
 config["singularity"]["concoct"] = "docker://nanozoo/concoct:latest"
 config["singularity"]["gbs"] = "docker://fischuu/gbs:0.2"
+config["singularity"]["metaquast"] = "docker://fischuu/metaquast:XXX"
 
 ##### Deriving runtime paramteres ######
 
@@ -229,7 +230,9 @@ rule qc:
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
         expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups)
+        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+ #       "%s/METAQUAST/final.contigs.meta" % (config["project-folder"]),
+        expand("%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"]), cagroup=assemblyGroups)
 
 rule decontaminate:
     input:
@@ -256,5 +259,6 @@ include: "rules/Step2-ReadProcessing.smk"
 include: "rules/Step2b-Decontamination.smk"
 include: "rules/Step2c-QC.smk"
 include: "rules/Step3-CreateMetagenome.smk"
+include: "rules/Step3b-Metagenome-QC.smk"
 include: "rules/Step4-GenePrediction.smk"
 include: "rules/Step5-MAGs.smk"

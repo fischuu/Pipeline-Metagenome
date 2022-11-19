@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+9: Metaquast added to the pipeline
+
 8: Group-wise co-assemblies are now also generated
 
 7: Added the QC (FastQC and MultiQC) for the Raw samples and concatenated as well as trimmed ones

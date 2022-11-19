@@ -145,6 +145,15 @@ samToBam_data_metagenome:
     mem-per-cpu: 32000
     cpus-per-task: 1
     
+# Step 3b -
+################################################################################
+    
+check_full_assembly:
+    job-name: check_full_assembly
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
 # Step 4 -
 ################################################################################
 prodigal_gene_prediction:
