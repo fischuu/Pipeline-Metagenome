@@ -121,6 +121,13 @@ assemble_contigs_megahit:
     cpus-per-task: 20
     partition: hugemem_longrun
 
+assemble_coassembly_contigs_megahit:
+    job-name: assemble_coassembly_contigs_megahit
+    time: 3-00:00:00
+    mem-per-cpu: 17000
+    cpus-per-task: 20
+    partition: small
+
 filter_length_megahit:
     job-name: filter_length_megahit
     time: 04:00:00

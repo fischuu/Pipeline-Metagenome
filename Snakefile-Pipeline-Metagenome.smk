@@ -229,11 +229,7 @@ rule qc:
         "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
- #       "%s/METAQUAST/final.contigs.meta" % (config["project-folder"]),
-        expand("%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"]), cagroup=assemblyGroups)
-
+        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
 rule decontaminate:
     input:
         expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
@@ -245,7 +241,10 @@ rule combineFastq:
 
 rule createMetagenome:
     input:
-        "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
+        "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
+        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+        #expand("%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"]), cagroup=assemblyGroups)
+
 
 rule alignment:
     input:
