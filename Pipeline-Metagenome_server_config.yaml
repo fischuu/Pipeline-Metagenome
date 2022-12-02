@@ -155,8 +155,8 @@ samToBam_data_metagenome:
 # Step 3b -
 ################################################################################
     
-check_full_assembly:
-    job-name: check_full_assembly
+check_assemblies:
+    job-name: check_assemblies
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20

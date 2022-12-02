@@ -1,41 +1,26 @@
-rule check_full_assembly:
+rule check_assemblies:
     """
-    Check full assembly (METAQUAST).
-    """
-    input:
-        "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"])
-    output:
-        "%s/METAQUAST/final.contigs.meta" % (config["project-folder"])
-    log:
-        "%s/logs/check_full_assembly.log" % (config["project-folder"])
-    benchmark:
-        "%s/benchmark/check_full_assembly.benchmark.tsv" % (config["project-folder"])
-    singularity: config["singularity"]["metaquast"]
-    resources:
-        time=cluster["check_full_assembly"]["time"],
-        mem=cluster["check_full_assembly"]["mem-per-cpu"]
-    threads: cluster["check_full_assembly"]["cpus-per-task"]
-    shell:"""
-        metaquast.py -t {threads} --no-plots -o {output} -1 {input}
-    """
-
-rule check_group_assembly:
-    """
-    Check group assembly (METAQUAST).
+    Check the different assemblies (METAQUAST).
     """
     input:
-        "%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"])
+        full="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
+        coas=expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups)
     output:
-        "%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"])
+        "%s/QUAST/report.html" % (config["project-folder"])
     log:
-        "%s/logs/check_full_assembly.group_{cagroup}.log" % (config["project-folder"])
+        "%s/logs/check_assemblies.log" % (config["project-folder"])
     benchmark:
-        "%s/benchmark/check_full_assembly.group_{cagroup}.benchmark.tsv" % (config["project-folder"])
-    singularity: config["singularity"]["metaquast"]
+        "%s/benchmark/check_assemblies.benchmark.tsv" % (config["project-folder"])
+    singularity: config["singularity"]["quast"]
     resources:
-        time=cluster["check_full_assembly"]["time"],
-        mem=cluster["check_full_assembly"]["mem-per-cpu"]
-    threads: cluster["check_full_assembly"]["cpus-per-task"]
+        time=cluster["check_assemblies"]["time"],
+        mem=cluster["check_assemblies"]["mem-per-cpu"]
+    threads: cluster["check_assemblies"]["cpus-per-task"]
+    params: out="%s/QUAST" % (config["project-folder"])
     shell:"""
-        metaquast.py -t {threads} {input} --no-plots -o {output}
+        metaquast.py \
+            -o {params.out} \
+	          {input.full} {input.coas}
+            --max-ref-number 0 \
+            --threads {threads}
     """

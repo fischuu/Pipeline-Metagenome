@@ -162,7 +162,7 @@ config["singularity"]["eggnog"] = "docker://fischuu/eggnog:latest"
 config["singularity"]["subread"] = "docker://fischuu/subread:2.0.1-0.1"
 config["singularity"]["concoct"] = "docker://nanozoo/concoct:latest"
 config["singularity"]["gbs"] = "docker://fischuu/gbs:0.2"
-config["singularity"]["metaquast"] = "docker://fischuu/metaquast:XXX"
+config["singularity"]["quast"] = "docker://fischuu/quast:5.2.0-0.2"
 
 ##### Deriving runtime paramteres ######
 
@@ -195,6 +195,8 @@ print("##### prodigal       : "+config["singularity"]["prodigal"])
 print("##### eggnog         : "+config["singularity"]["eggnog"])
 print("##### subread        : "+config["singularity"]["subread"])
 print("##### gbs            : "+config["singularity"]["gbs"])
+print("##### quast          : "+config["singularity"]["quast"])
+
 
 ##### run complete pipeline #####
 
@@ -203,6 +205,7 @@ rule all:
       "%s/FASTQ/MERGED/all_merged_R1.fastq.gz" % (config["project-folder"]),
       "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"]),
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
+      "%s/QUAST/report.html" % (config["project-folder"]),
       expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
       "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
       "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
@@ -242,6 +245,7 @@ rule combineFastq:
 rule createMetagenome:
     input:
         "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
+        "%s/QUAST/report.html" % (config["project-folder"]),
         expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
         #expand("%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"]), cagroup=assemblyGroups)
 
