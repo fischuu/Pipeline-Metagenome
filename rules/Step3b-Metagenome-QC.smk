@@ -20,7 +20,7 @@ rule check_assemblies:
     shell:"""
         metaquast.py \
             -o {params.out} \
-	          {input.full} {input.coas}
+	          {input.full} {input.coas} \
             --max-ref-number 0 \
             --threads {threads}
     """
