@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+11: Bowtie2 indices are now forced to be large to avoid index naming issues
+
 10: Added rules to align reads against the various assemblies (full and co-assemblies)
 
 9: Metaquast added to the pipeline

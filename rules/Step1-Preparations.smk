@@ -20,7 +20,7 @@ rule create_index_bowtie2_full:
     threads: cluster["create_index_bowtie2_full"]["cpus-per-task"]
     singularity: config["singularity"]["bowtie2"]
     shell:"""
-        bowtie2-build --threads {threads} {input} {params.out}
+        bowtie2-build --large-index --threads {threads} {input} {params.out}
     """
     
 rule create_index_bowtie2_coas:
@@ -43,5 +43,5 @@ rule create_index_bowtie2_coas:
     threads: cluster["create_index_bowtie2_coas"]["cpus-per-task"]
     singularity: config["singularity"]["bowtie2"]
     shell:"""
-        bowtie2-build --threads {threads} {input} {params.out}
+        bowtie2-build --large-index --threads {threads} {input} {params.out}
     """
