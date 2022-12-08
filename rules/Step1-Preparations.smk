@@ -15,9 +15,9 @@ rule create_index_bowtie2_full:
     params:
         out="%s/MEGAHIT/bowtie2.indices/final.contigs/final.contigs_full" % (config["project-folder"])
     resources:
-        time=cluster["create_index_bowtie2"]["time"],
-        mem=cluster["create_index_bowtie2"]["mem-per-cpu"]
-    threads: cluster["create_index_bowtie2"]["cpus-per-task"]
+        time=cluster["create_index_bowtie2_full"]["time"],
+        mem=cluster["create_index_bowtie2_full"]["mem-per-cpu"]
+    threads: cluster["create_index_bowtie2_full"]["cpus-per-task"]
     singularity: config["singularity"]["bowtie2"]
     shell:"""
         bowtie2-build --threads {threads} {input} {params.out}
@@ -38,9 +38,9 @@ rule create_index_bowtie2_coas:
     params:
         out="%s/MEGAHIT/bowtie2.indices/final.contigs_coas{cagroup}/final.contigs_coas{cagroup}" % (config["project-folder"])
     resources:
-        time=cluster["create_index_bowtie2"]["time"],
-        mem=cluster["create_index_bowtie2"]["mem-per-cpu"]
-    threads: cluster["create_index_bowtie2"]["cpus-per-task"]
+        time=cluster["create_index_bowtie2_coas"]["time"],
+        mem=cluster["create_index_bowtie2_coas"]["mem-per-cpu"]
+    threads: cluster["create_index_bowtie2_coas"]["cpus-per-task"]
     singularity: config["singularity"]["bowtie2"]
     shell:"""
         bowtie2-build --threads {threads} {input} {params.out}

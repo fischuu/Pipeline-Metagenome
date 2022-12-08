@@ -17,8 +17,14 @@ star_create_host_index:
     mem-per-cpu: 4000
     cpus-per-task: 20
     
-create_index_bowtie2:
-    job-name: create_index_bowtie2
+create_index_bowtie2_full:
+    job-name: create_index_bowtie2_full
+    time: 0-10:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+create_index_bowtie2_coas:
+    job-name: create_index_bowtie2_coas
     time: 0-10:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
