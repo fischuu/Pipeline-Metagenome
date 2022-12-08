@@ -16,6 +16,13 @@ star_create_host_index:
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    
+create_index_bowtie2:
+    job-name: create_index_bowtie2
+    time: 0-10:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
 
 # Step2 - ReadProcessing
 ################################################################################
@@ -161,6 +168,21 @@ check_assemblies:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
+# Step 3c - Read alignments to reference genome
+################################################################################
+
+map_data_final_contigs_bowtie2:
+    job-name: map_data_final_contigs_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+samToBam_data_metagenome:
+    job-name: samToBam_data_metagenome
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
 # Step 4 -
 ################################################################################
 prodigal_gene_prediction:

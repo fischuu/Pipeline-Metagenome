@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.9
-version = "0.3.9"
+##### Version: 0.3.10
+version = "0.3.10"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -252,6 +252,8 @@ rule createMetagenome:
 
 rule alignment:
     input:
+        expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
+        expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), cagroup=assemblyGroups, samples=samples)
 
 ### setup report #####
 report: "report/workflow.rst"
@@ -263,5 +265,6 @@ include: "rules/Step2b-Decontamination.smk"
 include: "rules/Step2c-QC.smk"
 include: "rules/Step3-CreateMetagenome.smk"
 include: "rules/Step3b-Metagenome-QC.smk"
+include: "rules/Step3c-ReadAlignments.smk"
 include: "rules/Step4-GenePrediction.smk"
 include: "rules/Step5-MAGs.smk"

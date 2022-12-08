@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+10: Added rules to align reads against the various assemblies (full and co-assemblies)
+
 9: Metaquast added to the pipeline
 
 8: Group-wise co-assemblies are now also generated
