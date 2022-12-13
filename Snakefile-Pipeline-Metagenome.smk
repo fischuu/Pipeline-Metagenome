@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.12
-version = "0.3.12"
+##### Version: 0.3.13
+version = "0.3.13"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -116,7 +116,7 @@ def merge_r2_reads(wildcards):
     return out
 
 def merge_r1_ca_reads(wildcards):
-    samples = samplesheet[samplesheet["assemblyGroup"].astype(int) == int(wildcards.cagroup)]["sample_name"]
+    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(wildcards.cagroup)]["sample_name"].drop_duplicates()
     if config["contamination-folder"] == "":
       out = expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
     else:
@@ -124,7 +124,7 @@ def merge_r1_ca_reads(wildcards):
     return out
 
 def merge_r2_ca_reads(wildcards):
-    samples = samplesheet[samplesheet["assemblyGroup"].astype(int) == int(wildcards.cagroup)]["sample_name"]
+    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(wildcards.cagroup)]["sample_name"].drop_duplicates()
     if config["contamination-folder"] == "":
       out = expand("%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
     else:

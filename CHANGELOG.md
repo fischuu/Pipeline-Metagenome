@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+13: Samples can now be used in several co-assemblies, separated by comma in samplesheet file
+
 12: Server resource allocation names adjusted
 
 11: Bowtie2 indices are now forced to be large to avoid index naming issues
