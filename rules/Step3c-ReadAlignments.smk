@@ -16,9 +16,9 @@ rule map_data_final_contigs_full_bowtie2:
         index="%s/MEGAHIT/bowtie2.indices/final.contigs/final.contigs_full" % (config["project-folder"])
     singularity: config["singularity"]["bowtie2"]
     resources:
-        time=cluster["map_data_final_contigs_bowtie2"]["time"],
-        mem=cluster["map_data_final_contigs_bowtie2"]["mem-per-cpu"]
-    threads: cluster["map_data_final_contigs_bowtie2"]["cpus-per-task"]
+        time=cluster["map_data_final_contigs_full_bowtie2"]["time"],
+        mem=cluster["map_data_final_contigs_full_bowtie2"]["mem-per-cpu"]
+    threads: cluster["map_data_final_contigs_full_bowtie2"]["cpus-per-task"]
     shell:"""
         bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output}
     """
@@ -64,9 +64,9 @@ rule map_data_final_contigs_coas_bowtie2:
         index="%s/MEGAHIT/bowtie2.indices/final.contigs_coas{cagroup}/final.contigs_coas{cagroup}" % (config["project-folder"])
     singularity: config["singularity"]["bowtie2"]
     resources:
-        time=cluster["map_data_final_contigs_bowtie2"]["time"],
-        mem=cluster["map_data_final_contigs_bowtie2"]["mem-per-cpu"]
-    threads: cluster["map_data_final_contigs_bowtie2"]["cpus-per-task"]
+        time=cluster["map_data_final_contigs_coas_bowtie2"]["time"],
+        mem=cluster["map_data_final_contigs_coas_bowtie2"]["mem-per-cpu"]
+    threads: cluster["map_data_final_contigs_coas_bowtie2"]["cpus-per-task"]
     shell:"""
         bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output}
     """

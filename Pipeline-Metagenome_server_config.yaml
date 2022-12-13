@@ -177,11 +177,17 @@ check_assemblies:
 # Step 3c - Read alignments to reference genome
 ################################################################################
 
-map_data_final_contigs_bowtie2:
-    job-name: map_data_final_contigs_bowtie2
+map_data_final_contigs_full_bowtie2:
+    job-name: map_data_final_contigs_full_bowtie2
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    
+map_data_final_contigs_coas_bowtie2:
+    job-name: map_data_final_contigs_coas_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20    
 
 samToBam_data_metagenome:
     job-name: samToBam_data_metagenome
