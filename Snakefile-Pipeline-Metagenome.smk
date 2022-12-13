@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.11
-version = "0.3.11"
+##### Version: 0.3.12
+version = "0.3.12"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -27,7 +27,12 @@ samplesheet = pd.read_table(config["samplesheet"]).set_index("rawsample", drop=F
 rawsamples=list(samplesheet.rawsample)
 samples=list(set(list(samplesheet.sample_name)))  # Unique list
 lane=list(samplesheet.lane)
+
 assemblyGroups=list(set(list(samplesheet.assemblyGroup)))  # Unique list
+assemblyGroups = [str(i) for i in assemblyGroups]          # Needed if more than one group per sample is given (via ',')
+assemblyGroups = [i.split(',') for i in assemblyGroups]
+assemblyGroups = list(set(sum(assemblyGroups, [])))
+assemblyGroups = [int(i) for i in assemblyGroups]
 
 workdir: config["project-folder"]
 

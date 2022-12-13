@@ -20,7 +20,7 @@ rule map_data_final_contigs_full_bowtie2:
         mem=cluster["map_data_final_contigs_full_bowtie2"]["mem-per-cpu"]
     threads: cluster["map_data_final_contigs_full_bowtie2"]["cpus-per-task"]
     shell:"""
-        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output}
+        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output} 2> {log};
     """
     
 rule samToBam_data_metagenome:
@@ -68,7 +68,7 @@ rule map_data_final_contigs_coas_bowtie2:
         mem=cluster["map_data_final_contigs_coas_bowtie2"]["mem-per-cpu"]
     threads: cluster["map_data_final_contigs_coas_bowtie2"]["cpus-per-task"]
     shell:"""
-        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output}
+        bowtie2 -p {threads} -x {params.index} -1 {input.R1} -2 {input.R2} > {output} 2> {log};
     """
     
 rule samToBam_data_metagenome_coas:

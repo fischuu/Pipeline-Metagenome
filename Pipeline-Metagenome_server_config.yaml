@@ -153,8 +153,14 @@ create_index_bowtie2:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
-map_data_metagenome_bowtie2:
-    job-name: map_data_metagenome_bowtie2
+map_data_final_contigs_full_bowtie2:
+    job-name: map_data_final_contigs_full_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+map_data_final_contigs_coas_bowtie2:
+    job-name: map_data_final_contigs_coas_bowtie2
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
