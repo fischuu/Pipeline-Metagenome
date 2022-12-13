@@ -170,7 +170,13 @@ samToBam_data_metagenome:
     time: 01:00:00
     mem-per-cpu: 32000
     cpus-per-task: 1
-    
+
+samToBam_data_metagenome_coas:
+    job-name: samToBam_data_metagenome_coas
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1
+
 # Step 3b -
 ################################################################################
     
