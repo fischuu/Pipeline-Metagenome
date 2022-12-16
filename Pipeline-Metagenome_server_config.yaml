@@ -165,18 +165,6 @@ map_data_final_contigs_coas_bowtie2:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
-samToBam_data_metagenome:
-    job-name: samToBam_data_metagenome
-    time: 01:00:00
-    mem-per-cpu: 32000
-    cpus-per-task: 1
-
-samToBam_data_metagenome_coas:
-    job-name: samToBam_data_metagenome_coas
-    time: 01:00:00
-    mem-per-cpu: 32000
-    cpus-per-task: 1
-
 # Step 3b -
 ################################################################################
     
@@ -203,9 +191,15 @@ map_data_final_contigs_coas_bowtie2:
 
 samToBam_data_metagenome:
     job-name: samToBam_data_metagenome
-    time: 04:00:00
-    mem-per-cpu: 4000
-    cpus-per-task: 20
+    time: 0-10:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1
+
+samToBam_data_metagenome_coas:
+    job-name: samToBam_data_metagenome_coas
+    time: 0-10:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1
     
 # Step 4 -
 ################################################################################
