@@ -203,14 +203,26 @@ samToBam_data_metagenome_coas:
     
 # Step 4 -
 ################################################################################
-prodigal_gene_prediction:
-    job-name: prodigal_gene_prediction
+prodigal_full_gene_prediction:
+    job-name: prodigal_full_gene_prediction
+    time: 1-00:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+prodigal_coas_gene_prediction:
+    job-name: prodigal_coas_gene_prediction
     time: 1-00:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
 
-cut_prodigal_bash:
-    job-name: cut_prodigal_bash
+cut_prodigal_full_bash:
+    job-name: cut_prodigal_full_bash
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+    
+cut_prodigal_coas_bash:
+    job-name: cut_prodigal_full_bash
     time: 04:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
@@ -221,15 +233,29 @@ prepare_eggnog_database:
     mem-per-cpu: 16000
     cpus-per-task: 1
     
-eggnog_find_homology_parallel:
-    job-name: eggnog_find_homology_parallel
+eggnog_find_homology_parallel_full:
+    job-name: eggnog_find_homology_parallel_full
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     nvme: 180
     
-eggnog_orthology:
-    job-name: eggnog_orthology
+eggnog_find_homology_parallel_coas:
+    job-name: eggnog_find_homology_parallel_coas
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    nvme: 180
+
+eggnog_full_orthology:
+    job-name: eggnog_full_orthology
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    nvme: 180
+
+eggnog_coas_orthology:
+    job-name: eggnog_coas_orthology
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20

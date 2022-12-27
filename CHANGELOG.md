@@ -6,6 +6,10 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+15: Eggnog annotation added
+
+14: Prodigal gene prediction added
+
 13: Samples can now be used in several co-assemblies, separated by comma in samplesheet file
 
 12: Server resource allocation names adjusted

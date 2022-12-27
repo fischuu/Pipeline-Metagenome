@@ -36,7 +36,7 @@ rule multiqc_quality_control_raw_data_r1:
         "%s/benchmark/multiqc_quality_control_raw_data_r1.tsv" % (config["project-folder"])
     params:
        zip= lambda wildcards: "%s/QC/RAW/{wildcards.reads1}_fastqc.zip" % (config["project-folder"]),
-       tmpdir=config["tmpdir"]
+       tmpdir=config["tmp"]
     threads: cluster["multiqc_quality_control_raw_data_r1"]["cpus-per-task"]
     resources:
         time=cluster["multiqc_quality_control_raw_data_r1"]["time"],
@@ -123,7 +123,7 @@ rule multiqc_quality_control_concatenated_data:
     params:
        R1="%s/QC/CONCATENATED/*_R1_fastqc.zip" % (config["project-folder"]),
        R2="%s/QC/CONCATENATED/*_R2_fastqc.zip" % (config["project-folder"]),
-       tmpdir=config["tmpdir"]
+       tmpdir=config["tmp"]
     singularity: config["singularity"]["gbs"]
     shell:"""
         export TMPDIR={params.tmpdir}
@@ -203,7 +203,7 @@ rule multiqc_quality_control_trimmed_data:
     params:
        R1="%s/QC/TRIMMED/*_R1.trimmed_fastqc.zip" % (config["project-folder"]),
        R2="%s/QC/TRIMMED/*_R2.trimmed_fastqc.zip" % (config["project-folder"]),
-       tmpdir=config["tmpdir"]
+       tmpdir=config["tmp"]
     threads: cluster["multiqc_quality_control_trimmed_data"]["cpus-per-task"]
     resources:
         time=cluster["multiqc_quality_control_trimmed_data"]["time"],

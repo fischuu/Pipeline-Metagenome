@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.13
-version = "0.3.13"
+##### Version: 0.3.15
+version = "0.3.15"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -40,9 +40,6 @@ if(config["rawdata-folder"][0]!='/'):
 if(config["samplesheet-file"][0]!='/'):
     config["samplesheet-file"] = config["project-folder"] + '/' + config["samplesheet-file"]
     
-if(config["genome"][0]!='/'):
-    config["genome"] = config["project-folder"] + '/' + config["genome"]
-
 if(config["local-scratch"][0]!='/'):
     config["local-scratch"] = config["project-folder"] + '/' + config["local-scratch"]
 
@@ -51,7 +48,7 @@ if(config["tmp"][0]!='/'):
 
 ##### load config and sample sheets #####
 
-samplesheet = pd.read_table(config["samplesheet"]).set_index("rawsample", drop=False)
+samplesheet = pd.read_table(config["samplesheet-file"]).set_index("rawsample", drop=False)
 rawsamples=list(samplesheet.rawsample)
 samples=list(set(list(samplesheet.sample_name)))  # Unique list
 lane=list(samplesheet.lane)
@@ -235,20 +232,21 @@ rule all:
       "%s/FASTQ/MERGED/all_merged_R2.fastq.gz" % (config["project-folder"]),
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
       "%s/QUAST/report.html" % (config["project-folder"]),
-      expand("%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
-      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
-      "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
-      "%s/PRODIGAL/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
-      "%s/EGGNOG/eggnog_output.emapper.annotations" % (config["project-folder"]),
-      expand("%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"]), samples=samples),
-      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
-      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
-      "%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"]),
-      "%s/CONCOCT/coverage_table_2k.tsv" % (config["project-folder"]),
-      "%s/CONCOCT/1k_clustering_gt1000.csv" % (config["project-folder"]),
-      "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"]),
-      "%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]),
-      "%s/CONCOCT/fasta_bins_2k" % (config["project-folder"])
+      expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
+      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), cagroup=assemblyGroups, samples=samples)
+#      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
+#      "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
+#      "%s/PRODIGAL/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
+#      "%s/EGGNOG/eggnog_output.emapper.annotations" % (config["project-folder"]),
+#      expand("%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"]), samples=samples),
+#      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
+#      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
+#      "%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"]),
+#      "%s/CONCOCT/coverage_table_2k.tsv" % (config["project-folder"]),
+#      "%s/CONCOCT/1k_clustering_gt1000.csv" % (config["project-folder"]),
+#      "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"]),
+#      "%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]),
+#      "%s/CONCOCT/fasta_bins_2k" % (config["project-folder"])
 
 rule preparations:
     input:
@@ -262,6 +260,7 @@ rule qc:
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
         expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
+
 rule decontaminate:
     input:
         expand("%s/FASTQ/DECONTAMINATED/{samples}_R1.decontaminated.fastq.gz" % (config["project-folder"]), samples=samples)
@@ -284,6 +283,13 @@ rule alignment:
         expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
         expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), cagroup=assemblyGroups, samples=samples)
 
+rule genePrediction:
+    input:
+        "%s/PRODIGAL/final.contigs_full/final.contigs_full.prodigal.fa" % (config["project-folder"]),
+        expand("%s/PRODIGAL/final.contigs_group_{cagroup}/final.contigs_group_{cagroup}.prodigal.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+        "%s/EGGNOG/final.contigs_full/eggnog_output.emapper.annotations" % (config["project-folder"]),
+        expand("%s/EGGNOG/final.contigs_group_{cagroup}/eggnog_output.emapper.annotations" % (config["project-folder"]), cagroup=assemblyGroups)
+        
 ### setup report #####
 report: "report/workflow.rst"
 
