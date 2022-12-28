@@ -82,7 +82,7 @@ checkpoint cut_prodigal_coas_bash:
     output:
         directory("%s/PRODIGAL/final.contigs_group_{cagroup}/Chunks/" % (config["project-folder"]))
     params:
-        out="%s/PRODIGAL/final.contigs_full/Chunks/final.contigs_full.prodigal.chunk" % (config["project-folder"]),
+        out="%s/PRODIGAL/final.contigs_group_{cagroup}/Chunks/final.contigs_group_{cagroup}.prodigal.chunk" % (config["project-folder"]),
         folder=config["pipeline-folder"],
         split=1000000
     log:
@@ -205,7 +205,7 @@ def aggregate_coas_eggnog_search(wildcards):
 
 rule aggregate_coas_eggnog:
     input:
-        aggregate_coas_eggnog_search
+        aggregate_coas_eggnog_search,
     output:
         "%s/PRODIGAL/final.contigs_group_{cagroup}/eggnog.emapper.seed_orthologs" % (config["project-folder"])
     log:
@@ -221,7 +221,8 @@ rule eggnog_full_orthology:
     Find orthology and annotate (EGGNOG).
     """
     input:
-        orthologs="%s/PRODIGAL/final.contigs_full/eggnog.emapper.seed_orthologs" % (config["project-folder"])
+        orthologs="%s/PRODIGAL/final.contigs_full/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
+        folder="%s/EGGNOG/DATA/" % (config["project-folder"])
     output:
         "%s/EGGNOG/final.contigs_full/eggnog_output.emapper.annotations" % (config["project-folder"])
     log:
@@ -250,7 +251,8 @@ rule eggnog_coas_orthology:
     Find orthology and annotate (EGGNOG).
     """
     input:
-        orthologs="%s/PRODIGAL/final.contigs_group_{cagroup}/eggnog.emapper.seed_orthologs" % (config["project-folder"])
+        orthologs="%s/PRODIGAL/final.contigs_group_{cagroup}/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
+        folder="%s/EGGNOG/DATA/" % (config["project-folder"])
     output:
         "%s/EGGNOG/final.contigs_group_{cagroup}/eggnog_output.emapper.annotations" % (config["project-folder"])
     log:
