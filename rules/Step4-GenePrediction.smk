@@ -276,30 +276,3 @@ rule eggnog_coas_orthology:
        emapper.py --data_dir {params.tmp} --annotate_hits_table {input.orthologs} --no_file_comments -o {params.out} --cpu {threads} &> {log}
     """
     
-rule quantify_predictedGenes_featureCounts:
-    """
-    Quantify the mapped reads after merging (featureCounts).
-    """
-    input:
-        bam="%s/BAM/megahit/{samples}_mega.bam" % (config["project-folder"]),
-        gtf="%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"])
-    output:
-        file="%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"])
-    log:
-        "%s/logs/quantify_predictedGenes_featureCounts.{samples}.log" % (config["project-folder"])
-    benchmark:
-        "%s/benchmark/quantify_predictedGenes_featureCounts.{samples}.benchmark.tsv" % (config["project-folder"])
-    resources:
-        time=cluster["quantify_predictedGenes_featureCounts"]["time"],
-        mem=cluster["quantify_predictedGenes_featureCounts"]["mem-per-cpu"]
-    threads: cluster["quantify_predictedGenes_featureCounts"]["cpus-per-task"]
-    singularity: config["singularity"]["subread"]
-    shell:"""
-        featureCounts -p \
-                      -T {threads} \
-                      -a {input.gtf} \
-                      -o {output.file} \
-                      -t CDS \
-                      -g ID \
-                      {input.bam} 2> {log}
-    """

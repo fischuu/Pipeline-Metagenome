@@ -261,11 +261,17 @@ eggnog_coas_orthology:
     cpus-per-task: 20
     nvme: 180
     
-quantify_predictedGenes_featureCounts:
-    job-name: quantify_predictedGenes_featureCounts
+quantify_full_predictedGenes_featureCounts:
+    job-name: quantify_full_predictedGenes_featureCounts
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    
+quantify_coas_predictedGenes_featureCounts:
+    job-name: quantify_coas_predictedGenes_featureCounts
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20    
     
 # Step 5- MAGs
 ################################################################################

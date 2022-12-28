@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+16: Quantification step added
+
 15: Eggnog annotation added
 
 14: Prodigal gene prediction added

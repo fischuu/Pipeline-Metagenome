@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.15
-version = "0.3.15"
+##### Version: 0.3.16
+version = "0.3.16"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -40,9 +40,6 @@ if(config["rawdata-folder"][0]!='/'):
 if(config["samplesheet-file"][0]!='/'):
     config["samplesheet-file"] = config["project-folder"] + '/' + config["samplesheet-file"]
     
-if(config["local-scratch"][0]!='/'):
-    config["local-scratch"] = config["project-folder"] + '/' + config["local-scratch"]
-
 if(config["tmp"][0]!='/'):
     config["tmp"] = config["project-folder"] + '/' + config["tmp"]
 
@@ -233,11 +230,13 @@ rule all:
       "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
       "%s/QUAST/report.html" % (config["project-folder"]),
       expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples),
-      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), cagroup=assemblyGroups, samples=samples)
-#      "%s/PRODIGAL/final.contigs.prodigal.gtf" % (config["project-folder"]),
-#      "%s/PRODIGAL/EGGNOG-DATA/" % (config["project-folder"]),
-#      "%s/PRODIGAL/eggnog.emapper.seed_orthologs" % (config["project-folder"]),
-#      "%s/EGGNOG/eggnog_output.emapper.annotations" % (config["project-folder"]),
+      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), cagroup=assemblyGroups, samples=samples),
+      "%s/PRODIGAL/final.contigs_full/final.contigs_full.prodigal.fa" % (config["project-folder"]),
+      expand("%s/PRODIGAL/final.contigs_group_{cagroup}/final.contigs_group_{cagroup}.prodigal.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+      "%s/EGGNOG/final.contigs_full/eggnog_output.emapper.annotations" % (config["project-folder"]),
+      expand("%s/EGGNOG/final.contigs_group_{cagroup}/eggnog_output.emapper.annotations" % (config["project-folder"]), cagroup=assemblyGroups),
+      expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_full/{samples}_full_fc.txt" % (config["project-folder"]), samples=samples),
+      expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
 #      expand("%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"]), samples=samples),
 #      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
 #      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
@@ -290,6 +289,11 @@ rule genePrediction:
         "%s/EGGNOG/final.contigs_full/eggnog_output.emapper.annotations" % (config["project-folder"]),
         expand("%s/EGGNOG/final.contigs_group_{cagroup}/eggnog_output.emapper.annotations" % (config["project-folder"]), cagroup=assemblyGroups)
         
+rule quantification:
+    input:
+        expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_full/{samples}_full_fc.txt" % (config["project-folder"]), samples=samples),
+        expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
+        
 ### setup report #####
 report: "report/workflow.rst"
 
@@ -302,4 +306,5 @@ include: "rules/Step3-CreateMetagenome.smk"
 include: "rules/Step3b-Metagenome-QC.smk"
 include: "rules/Step3c-ReadAlignments.smk"
 include: "rules/Step4-GenePrediction.smk"
+include: "rules/Step5-Quantification.smk"
 include: "rules/Step5-MAGs.smk"
