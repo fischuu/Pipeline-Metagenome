@@ -6,6 +6,10 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+18: Report reads per contig for full and coas
+
+17: Added alignment statistics to the quantification
+
 16: Quantification step added
 
 15: Eggnog annotation added

@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.16
-version = "0.3.16"
+##### Version: 0.3.18
+version = "0.3.18"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -55,6 +55,7 @@ assemblyGroups = [str(i) for i in assemblyGroups]          # Needed if more than
 assemblyGroups = [i.split(',') for i in assemblyGroups]
 assemblyGroups = list(set(sum(assemblyGroups, [])))
 assemblyGroups = [int(i) for i in assemblyGroups]
+samplesheet["assemblyGroup"] = samplesheet["assemblyGroup"].astype(str)
 
 workdir: config["project-folder"]
 
@@ -134,7 +135,7 @@ def merge_r2_reads(wildcards):
     return out
 
 def merge_r1_ca_reads(wildcards):
-    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(wildcards.cagroup)]["sample_name"].drop_duplicates()
+    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(str(wildcards.cagroup))]["sample_name"].drop_duplicates()
     if config["contamination-folder"] == "":
       out = expand("%s/FASTQ/TRIMMED/{samples}_R1.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
     else:
@@ -142,7 +143,7 @@ def merge_r1_ca_reads(wildcards):
     return out
 
 def merge_r2_ca_reads(wildcards):
-    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(wildcards.cagroup)]["sample_name"].drop_duplicates()
+    samples = samplesheet[samplesheet["assemblyGroup"].str.contains(str(wildcards.cagroup))]["sample_name"].drop_duplicates()
     if config["contamination-folder"] == "":
       out = expand("%s/FASTQ/TRIMMED/{samples}_R2.trimmed.fastq.gz" % (config["project-folder"]), samples=samples)
     else:
@@ -236,8 +237,12 @@ rule all:
       "%s/EGGNOG/final.contigs_full/eggnog_output.emapper.annotations" % (config["project-folder"]),
       expand("%s/EGGNOG/final.contigs_group_{cagroup}/eggnog_output.emapper.annotations" % (config["project-folder"]), cagroup=assemblyGroups),
       expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_full/{samples}_full_fc.txt" % (config["project-folder"]), samples=samples),
-      expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
-#      expand("%s/QUANTIFICATION/PRODIGAL_FC/{samples}_fc.txt" % (config["project-folder"]), samples=samples),
+      expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
+      expand("%s/BAM/final.contigs_full/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples),
+      expand("%s/BAM/final.contigs_full/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples),
+      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
+      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
+
 #      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
 #      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),
 #      "%s/CONCOCT/coverage_table_1k.tsv" % (config["project-folder"]),
@@ -292,7 +297,11 @@ rule genePrediction:
 rule quantification:
     input:
         expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_full/{samples}_full_fc.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
+        expand("%s/QUANTIFICATION/PRODIGAL_FC/final.contigs_group_{cagroup}/{samples}_group_{cagroup}_fc.txt" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
+        expand("%s/BAM/final.contigs_full/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples),
+        expand("%s/BAM/final.contigs_full/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples),
+        expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
+        expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
         
 ### setup report #####
 report: "report/workflow.rst"
@@ -307,4 +316,4 @@ include: "rules/Step3b-Metagenome-QC.smk"
 include: "rules/Step3c-ReadAlignments.smk"
 include: "rules/Step4-GenePrediction.smk"
 include: "rules/Step5-Quantification.smk"
-include: "rules/Step5-MAGs.smk"
+include: "rules/Step6-MAGs.smk"

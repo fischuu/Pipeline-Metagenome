@@ -261,6 +261,9 @@ eggnog_coas_orthology:
     cpus-per-task: 20
     nvme: 180
     
+# Step 5 - Quantification
+################################################################################
+
 quantify_full_predictedGenes_featureCounts:
     job-name: quantify_full_predictedGenes_featureCounts
     time: 04:00:00
@@ -272,7 +275,19 @@ quantify_coas_predictedGenes_featureCounts:
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20    
+
+Full_AlignmentStats:
+    job-name: Full_AlignmentStats
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1   
     
+Coas_AlignmentStats:
+    job-name: Coas_AlignmentStats
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1   
+
 # Step 5- MAGs
 ################################################################################
 cut_filtered_contigs_concoct:
