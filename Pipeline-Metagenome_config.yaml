@@ -25,3 +25,4 @@ params:
     limitGenomeGenerateRAM: 300647710720
   concoct:
     maxClusters: 4000
+    bedcut: 10000000

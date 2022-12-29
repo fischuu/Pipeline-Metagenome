@@ -57,6 +57,8 @@ assemblyGroups = list(set(sum(assemblyGroups, [])))
 assemblyGroups = [int(i) for i in assemblyGroups]
 samplesheet["assemblyGroup"] = samplesheet["assemblyGroup"].astype(str)
 
+fafilter = ["1k", "2k"]
+
 workdir: config["project-folder"]
 
 ##### Complete the input configuration
@@ -65,8 +67,9 @@ config["report-script"] = config["pipeline-folder"]+"/scripts/workflow-report.Rm
 wildcard_constraints:
     rawsamples="|".join(rawsamples),
     samples="|".join(samples),
-    cagroup="|".join(str(assemblyGroups))
-    
+    cagroup="|".join(str(assemblyGroups)),
+    fafilter="|".join(fafilter)
+
 ##### Extract the cluster resource requests from the server config #####
 cluster=dict()
 if os.path.exists(config["server-config"]):
@@ -306,6 +309,12 @@ rule quantification:
         expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
         expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
         
+rule mags:
+    input:
+        expand("%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+
 ### setup report #####
 report: "report/workflow.rst"
 

@@ -294,10 +294,16 @@ Coas_AlignmentStats:
     mem-per-cpu: 32000
     cpus-per-task: 1   
 
-# Step 5- MAGs
+# Step 6- MAGs
 ################################################################################
 cut_filtered_contigs_concoct:
     job-name: cut_filtered_contigs_concoct
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+    
+cut_filtered_contigs_coas_concoct:
+    job-name: cut_filtered_contigs_coas_concoct
     time: 04:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
@@ -308,17 +314,10 @@ process_covTable_bed_parallel:
     mem-per-cpu: 16000
     cpus-per-task: 1
     
-
-process_covTable_bed_parallel_1k:
-    job-name: process_covTable_bed_parallel_1k
+process_covTable_bed_coas_parallel:
+    job-name: process_covTable_bed_coas_parallel
     time: 04:00:00
-    mem-per-cpu: 192000
-    cpus-per-task: 1
-
-process_covTable_bed_parallel_2k:
-    job-name: process_covTable_bed_parallel_2k
-    time: 04:00:00
-    mem-per-cpu: 192000
+    mem-per-cpu: 16000
     cpus-per-task: 1
 
 run_concoct_1k:
