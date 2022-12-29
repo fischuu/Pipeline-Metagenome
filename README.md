@@ -57,9 +57,13 @@ bash run_Metagenome-Pipeline.sh
 ```
 
 ## More details
-For more details, please visit the project wiki page here, it contains details
-to the runtime paramters, explains how to populate the above mentioned files
-and also contains convenience script to create the samplesheet programmatically.
+For more details, please visit the project wiki page:
+
+https://github.com/fischuu/Pipeline-Metagenome/wiki
+
+It contains details to the runtime paramters, explains how to populate the above
+mentioned files and also contains convenience script to create the samplesheet
+programmatically.
 
 Further, the pipeline has several entry points so that it does not need to run
 as a whole.
