@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.18
-version = "0.3.18"
+##### Version: 0.3.21
+version = "0.3.21"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -64,8 +64,9 @@ config["report-script"] = config["pipeline-folder"]+"/scripts/workflow-report.Rm
 
 wildcard_constraints:
     rawsamples="|".join(rawsamples),
-    samples="|".join(samples)
-
+    samples="|".join(samples),
+    cagroup="|".join(str(assemblyGroups))
+    
 ##### Extract the cluster resource requests from the server config #####
 cluster=dict()
 if os.path.exists(config["server-config"]):
@@ -279,8 +280,10 @@ rule createMetagenome:
         "%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
         "%s/QUAST/report.html" % (config["project-folder"]),
         expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
-        #expand("%s/METAQUAST/final.contigs.group_{cagroup}.meta" % (config["project-folder"]), cagroup=assemblyGroups)
-
+        "%s/MEGAHIT/final.contigs.1k.fa" % (config["project-folder"]),
+        "%s/MEGAHIT/final.contigs.2k.fa" % (config["project-folder"]),
+        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.1k.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+        expand("%s/MEGAHIT/final.contigs.group_{cagroup}.2k.fa" % (config["project-folder"]), cagroup=assemblyGroups)
 
 rule alignment:
     input:

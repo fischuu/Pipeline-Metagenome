@@ -134,22 +134,6 @@ rule aggregate_coverage_table_1k:
     params:
         header="%s/CONCOCT/coverage_table_1k_header_00.tsv" % (config["project-folder"])
     shell:"""
-        # This was my manual approach to it... Keep this as reminder until below approach is validated in larger test run
-        # head -n 1 coverage_table_00.tsv > header
-        # tail -n +2 "coverage_table_00.tsv" > ct_00.tsv
-        # tail -n +2 "coverage_table_01.tsv" > ct_01.tsv
-        # tail -n +2 "coverage_table_02.tsv" > ct_02.tsv
-        # tail -n +2 "coverage_table_03.tsv" > ct_03.tsv
-        # tail -n +2 "coverage_table_04.tsv" > ct_04.tsv
-        # tail -n +2 "coverage_table_05.tsv" > ct_05.tsv
-        # tail -n +2 "coverage_table_06.tsv" > ct_06.tsv
-        # tail -n +2 "coverage_table_07.tsv" > ct_07.tsv
-        
-        # cat ct_00.tsv ct_01.tsv ct_02.tsv ct_03.tsv ct_04.tsv ct_05.tsv ct_06.tsv ct_07.tsv > ct.tsv
-        # sort -t_ -k2,2n ct.tsv > ct_sorted.tsv
-        # cat header ct_sorted.tsv > coverage_table.tsv
-        # rm -rf ct*
-
         cat {input} > {output.tmp}
         sort -t_ -k2,2n {output.tmp} > {output.tmp2}
         cat {params.header} {output.tmp2} > {output.all}
@@ -165,21 +149,6 @@ rule aggregate_coverage_table_2k:
     params:
         header="%s/CONCOCT/coverage_table_2k_header_00.tsv" % (config["project-folder"])
     shell:"""
-        # This was my manual approach to it... Keep this as reminder until below approach is validated in larger test run
-        # head -n 1 coverage_table_00.tsv > header
-        # tail -n +2 "coverage_table_00.tsv" > ct_00.tsv
-        # tail -n +2 "coverage_table_01.tsv" > ct_01.tsv
-        # tail -n +2 "coverage_table_02.tsv" > ct_02.tsv
-        # tail -n +2 "coverage_table_03.tsv" > ct_03.tsv
-        # tail -n +2 "coverage_table_04.tsv" > ct_04.tsv
-        # tail -n +2 "coverage_table_05.tsv" > ct_05.tsv
-        # tail -n +2 "coverage_table_06.tsv" > ct_06.tsv
-        # tail -n +2 "coverage_table_07.tsv" > ct_07.tsv
-        
-        # cat ct_00.tsv ct_01.tsv ct_02.tsv ct_03.tsv ct_04.tsv ct_05.tsv ct_06.tsv ct_07.tsv > ct.tsv
-        # sort -t_ -k2,2n ct.tsv > ct_sorted.tsv
-        # cat header ct_sorted.tsv > coverage_table.tsv
-        # rm -rf ct*
         
         cat {input} > {output.tmp}
         sort -t_ -k2,2n {output.tmp} > {output.tmp2}

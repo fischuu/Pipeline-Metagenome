@@ -4,7 +4,11 @@ rule check_assemblies:
     """
     input:
         full="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
-        coas=expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups)
+        coas=expand("%s/MEGAHIT/final.contigs.group_{cagroup}.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+        fullfilter1k="%s/MEGAHIT/final.contigs.1k.fa" % (config["project-folder"]),
+        fullfilter2k="%s/MEGAHIT/final.contigs.2k.fa" % (config["project-folder"]),
+        coasfilter1k=expand("%s/MEGAHIT/final.contigs.group_{cagroup}.1k.fa" % (config["project-folder"]), cagroup=assemblyGroups),
+        coasfilter2k=expand("%s/MEGAHIT/final.contigs.group_{cagroup}.2k.fa" % (config["project-folder"]), cagroup=assemblyGroups)
     output:
         "%s/QUAST/report.html" % (config["project-folder"])
     log:
@@ -20,7 +24,7 @@ rule check_assemblies:
     shell:"""
         metaquast.py \
             -o {params.out} \
-	          {input.full} {input.coas} \
+	          {input.full} {input.coas} {input.fullfilter1k} {input.fullfilter2k} {input.coasfilter1k} {input.coasfilter2k}\
             --max-ref-number 0 \
             --threads {threads}
     """

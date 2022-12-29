@@ -6,6 +6,12 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+21: Added the filtered assemblies to the QUAST report
+
+20: Added a length filter for the metagenome assemblies
+
+19: Constrained the cagroup wildcard
+
 18: Report reads per contig for full and coas
 
 17: Added alignment statistics to the quantification

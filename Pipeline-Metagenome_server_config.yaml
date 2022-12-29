@@ -141,8 +141,14 @@ assemble_coassembly_contigs_megahit:
     cpus-per-task: 20
     partition: small
 
-filter_length_megahit:
-    job-name: filter_length_megahit
+filter_length_full_megahit:
+    job-name: filter_length_full_megahit
+    time: 04:00:00
+    mem-per-cpu: 64000
+    cpus-per-task: 1
+
+filter_length_coas_megahit:
+    job-name: filter_length_coas_megahit
     time: 04:00:00
     mem-per-cpu: 64000
     cpus-per-task: 1
