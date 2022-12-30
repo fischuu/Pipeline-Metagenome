@@ -312,8 +312,9 @@ rule quantification:
 rule mags:
     input:
         expand("%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
         expand("%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
-        expand("%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+        expand("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
 
 ### setup report #####
 report: "report/workflow.rst"

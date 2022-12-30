@@ -137,9 +137,9 @@ assemble_contigs_megahit:
 assemble_coassembly_contigs_megahit:
     job-name: assemble_coassembly_contigs_megahit
     time: 3-00:00:00
-    mem-per-cpu: 17000
+    mem-per-cpu: 30000
     cpus-per-task: 20
-    partition: small
+    partition: hugemem
 
 filter_length_full_megahit:
     job-name: filter_length_full_megahit
@@ -310,39 +310,33 @@ cut_filtered_contigs_coas_concoct:
     
 process_covTable_bed_parallel:
     job-name: process_covTable_bed_parallel
-    time: 04:00:00
+    time: 08:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
     
 process_covTable_bed_coas_parallel:
     job-name: process_covTable_bed_coas_parallel
-    time: 04:00:00
+    time: 08:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
 
-run_concoct_1k:
-    job-name: run_concoct_1k
+run_concoct:
+    job-name: run_concoct
     partition: longrun
     time: 6-00:00:00
     mem-per-cpu: 8000
     cpus-per-task: 40
     
-run_concoct_2k:
-    job-name: run_concoct_2k
+run_concoct_coas:
+    job-name: run_concoct_coas
     partition: longrun
     time: 6-00:00:00
     mem-per-cpu: 8000
     cpus-per-task: 40
     
-extract_fasta_concoct_1k:
-    job-name: extract_fasta_concoct_1k
+extract_fasta_concoct:
+    job-name: extract_fasta_concoct
     time: 0-10:00:00
     mem-per-cpu: 84000
     cpus-per-task: 1
-    
-extract_fasta_concoct_2k:
-    job-name: extract_fasta_concoct_2k
-    time: 0-10:00:00
-    mem-per-cpu: 84000
-    cpus-per-task: 1    
     
