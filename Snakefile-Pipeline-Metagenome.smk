@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.22
-version = "0.3.22"
+##### Version: 0.3.23
+version = "0.3.23"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -314,7 +314,8 @@ rule mags:
         expand("%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]), fafilter=fafilter),
         expand("%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
         expand("%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
-        expand("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+        expand("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
+        expand("%s/CONCOCT/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter)
 
 ### setup report #####
 report: "report/workflow.rst"

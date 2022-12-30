@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+23. Concoct module  for the full assembly finalised
+
 22: Added the --cluster-cancel option to the start script
 
 21: Added the filtered assemblies to the QUAST report

@@ -223,7 +223,7 @@ rule extract_fasta_concoct:
     Extract fasta (CONCOCT).
     """
     input:
-        fa="%s/MEGAHIT/final.contigs.fa" % (config["project-folder"]),
+        fa="%s/MEGAHIT/final.contigs.{fafilter}.fa" % (config["project-folder"]),
         csv="%s/CONCOCT/{fafilter}_clustering_merged.csv" % (config["project-folder"])
     output:
         directory("%s/CONCOCT/fasta_bins_{fafilter}" % (config["project-folder"]))
