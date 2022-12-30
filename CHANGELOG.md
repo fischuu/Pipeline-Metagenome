@@ -6,6 +6,8 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+22: Added the --cluster-cancel option to the start script
+
 21: Added the filtered assemblies to the QUAST report
 
 20: Added a length filter for the metagenome assemblies

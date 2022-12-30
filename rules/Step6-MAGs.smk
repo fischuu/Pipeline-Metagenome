@@ -112,7 +112,7 @@ rule process_covTable_bed_coas_parallel:
         woheader="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_{i}.tsv" % (config["project-folder"]),
         header="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_{i}.tsv" % (config["project-folder"]),
     params:
-       bam="%s/BAM/final.contigs_group_{cagroup}/*.bam" % (config["project-folder"])
+       bam="%s/BAM/final.contigs_coas{cagroup}/*.bam" % (config["project-folder"])
     resources:
         time=cluster["process_covTable_bed_coas_parallel"]["time"],
         mem=cluster["process_covTable_bed_coas_parallel"]["mem-per-cpu"]

@@ -16,5 +16,5 @@ snakemake -s $pipelineFolder/Snakefile-Pipeline-Metagenome.smk \
           --configfile $projectFolder/Pipeline-Metagenome_config.yaml \
           --latency-wait 60 \
           --cluster-config $pipelineFolder/Pipeline-Metagenome_server_config.yaml \
-          --cluster "sbatch -t {cluster.time} --account={cluster.account} --gres=nvme:{cluster.nvme} --job-name={cluster.job-name} --tasks-per-node={cluster.ntasks} --cpus-per-task={cluster.cpus-per-task} --mem-per-cpu={cluster.mem-per-cpu} -p {cluster.partition} -D {cluster.working-directory}" \
-          $@
+          --cluster "sbatch -t {cluster.time} --account={cluster.account} --gres=nvme:{cluster.nvme} --job-name={cluster.job-name} --tasks-per-node={cluster.ntasks} --cpus-per-task={cluster.cpus-per-task} --mem-per-cpu={cluster.mem-per-cpu} -p {cluster.partition} -D {cluster.working-directory} --parsable" \
+          --cluster-cancel scancel $@
