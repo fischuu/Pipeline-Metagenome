@@ -85,8 +85,8 @@ rule process_covTable_bed_parallel:
         bed="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_{fafilter}/final.contigs.{fafilter}_10K.{i}" % (config["project-folder"]),
         bam=expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples)    
     output:
-        woheader=temp("%s/CONCOCT/coverage_table_{fafilter}_{i}.tsv" % (config["project-folder"])),
-        header=temp("%s/CONCOCT/coverage_table_{fafilter}_header_{i}.tsv" % (config["project-folder"]))
+        woheader="%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}_{i}.tsv" % (config["project-folder"]),
+        header="%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}_header_{i}.tsv" % (config["project-folder"])
     params:
        bam="%s/BAM/final.contigs_full/*.bam" % (config["project-folder"])
     resources:
@@ -109,8 +109,8 @@ rule process_covTable_bed_coas_parallel:
         bed="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_group_{cagroup}_{fafilter}/final.contigs.group_{cagroup}.{fafilter}_10K.{i}" % (config["project-folder"]),
         bam=expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)    
     output:
-        woheader=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_{i}.tsv" % (config["project-folder"])),
-        header=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_{i}.tsv" % (config["project-folder"]))
+        woheader="%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}_{i}.tsv" % (config["project-folder"]),
+        header="%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}_header_{i}.tsv" % (config["project-folder"])
     params:
        bam="%s/BAM/final.contigs_coas{cagroup}/*.bam" % (config["project-folder"])
     resources:
@@ -130,7 +130,7 @@ def aggregate_input_cov(wildcards):
     Aggregate the input object for the final coverage table
     """
     checkpoint_output = checkpoints.cut_input_bed.get(**wildcards).output[0]
-    returnValue = expand("%s/CONCOCT/coverage_table_{ff}_{i}.tsv" % (config["project-folder"]),
+    returnValue = expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{ff}_{i}.tsv" % (config["project-folder"]),
                   i=glob_wildcards(os.path.join(checkpoint_output, "final.contigs.{ff}_10K.{i}")).i,
                   ff={wildcards.fafilter})
     return returnValue  
@@ -140,7 +140,7 @@ def aggregate_input_coas_cov(wildcards):
     Aggregate the input object for the final coverage table
     """
     checkpoint_output = checkpoints.cut_input_coas_bed.get(**wildcards).output[0]
-    returnValue = expand("%s/CONCOCT/coverage_table_group_{gr}_{ff}_{i}.tsv" % (config["project-folder"]),
+    returnValue = expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{gr}_{ff}_{i}.tsv" % (config["project-folder"]),
                   i=glob_wildcards(os.path.join(checkpoint_output, "final.contigs.{ff}_10K.{i}")).i,
                   ff={wildcards.fafilter},
                   gr={wildcards.cagroup})
@@ -150,11 +150,11 @@ rule aggregate_coverage_table:
     input:
         aggregate_input_cov
     output:
-        all="%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"]),
-        tmp=temp("%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp" % (config["project-folder"])),
-        tmp2=temp("%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp2" % (config["project-folder"]))
+        all="%s/CONCOCT/OUTPUT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv" % (config["project-folder"]),
+        tmp=temp("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv.tmp" % (config["project-folder"])),
+        tmp2=temp("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv.tmp2" % (config["project-folder"]))
     params:
-        header="%s/CONCOCT/coverage_table_{fafilter}_header_00.tsv" % (config["project-folder"])
+        header="%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}_header_00.tsv" % (config["project-folder"])
     shell:"""
         cat {input} > {output.tmp}
         sort -t_ -k2,2n {output.tmp} > {output.tmp2}
@@ -165,11 +165,11 @@ rule aggregate_coverage_table_coas:
     input:
         aggregate_input_coas_cov
     output:
-        all="%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]),
-        tmp=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp" % (config["project-folder"])),
-        tmp2=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp2" % (config["project-folder"]))
+        all="%s/CONCOCT/OUTPUT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]),
+        tmp=temp("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp" % (config["project-folder"])),
+        tmp2=temp("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp2" % (config["project-folder"]))
     params:
-        header="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_00.tsv" % (config["project-folder"])
+        header="%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}_header_00.tsv" % (config["project-folder"])
     shell:"""
         cat {input} > {output.tmp}
         sort -t_ -k2,2n {output.tmp} > {output.tmp2}
@@ -182,7 +182,7 @@ rule run_concoct:
     """
     input:
         fa="%s/CONCOCT/INPUT_FILES/final.contigs.{fafilter}_10K.fa" % (config["project-folder"]),
-        coverage="%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"])
+        coverage="%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv" % (config["project-folder"])
     output:
         "%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
     log:
@@ -207,7 +207,7 @@ rule run_concoct_coas:
     """
     input:
         fa="%s/CONCOCT/INPUT_FILES/final.contigs.group_{cagroup}.{fafilter}_10K.fa" % (config["project-folder"]),
-        coverage="%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"])
+        coverage="%s/CONCOCT/OUTPUT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"])
     output:
         "%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
     log:

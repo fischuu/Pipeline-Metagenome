@@ -142,7 +142,7 @@ rule eggnog_find_homology_parallel_full:
     threads: cluster["eggnog_find_homology_parallel_full"]["cpus-per-task"]
     singularity: config["singularity"]["eggnog"]
     shell:""" 
-         cp {params.fa} {params.tmp}  &>> {log};
+         cp {params.fa} {params.tmp}  &> {log};
          emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input.files} --output_dir {params.folder} -o {params.out}  &>> {log};
     """
     
@@ -170,7 +170,7 @@ rule eggnog_find_homology_parallel_coas:
     threads: cluster["eggnog_find_homology_parallel_coas"]["cpus-per-task"]
     singularity: config["singularity"]["eggnog"]
     shell:""" 
-         cp {params.fa} {params.tmp}  &>> {log};
+         cp {params.fa} {params.tmp}  &> {log};
          emapper.py -m diamond --data_dir {params.tmp} --no_annot --no_file_comments --cpu {threads} -i {input.files} --output_dir {params.folder} -o {params.out}  &>> {log};
     """
     
@@ -180,7 +180,7 @@ def aggregate_full_eggnog_search(wildcards):
     """
     checkpoint_outputEGG = checkpoints.cut_prodigal_full_bash.get(**wildcards).output[0]
     return expand("%s/PRODIGAL/final.contigs_full/Chunks/chunk.{i}.emapper.seed_orthologs" % (config["project-folder"]),
-                  i=glob_wildcards(os.path.join(checkpoint_outputEGG, "final.contigs.prodigal.chunk.{i}")).i)        
+                  i=glob_wildcards(os.path.join(checkpoint_outputEGG, "final.contigs_full.prodigal.chunk.{i}")).i)        
 
 rule aggregate_full_eggnog:
     input:
@@ -192,7 +192,8 @@ rule aggregate_full_eggnog:
     benchmark:
         "%s/benchmark/aggregate_full_eggnog.benchmark.tsv" % (config["project-folder"])
     shell:"""
-       cat {input} > {output} 2> {log}
+       echo {input} &> {log}
+       cat {input} > {output} 2>> {log}
     """
     
 def aggregate_coas_eggnog_search(wildcards):
@@ -200,9 +201,11 @@ def aggregate_coas_eggnog_search(wildcards):
     Aggregate the input object for the eggnog search
     """
     checkpoint_outputEGG = checkpoints.cut_prodigal_coas_bash.get(**wildcards).output[0]
-    return expand("%s/PRODIGAL/final.contigs_group_{cagroup}/Chunks/chunk.{i}.emapper.seed_orthologs" % (config["project-folder"]),
-                  i=glob_wildcards(os.path.join(checkpoint_outputEGG, "final.contigs.prodigal.chunk.{i}")).i)        
+    return expand("%s/PRODIGAL/final.contigs_group_{gr}/Chunks/chunk.{i}.emapper.seed_orthologs" % (config["project-folder"]),
+                  i=glob_wildcards(os.path.join(checkpoint_outputEGG, "final.contigs_group_{gr}.prodigal.chunk.{i}")).i,
+                  gr={wildcards.cagroup})        
 
+                  
 rule aggregate_coas_eggnog:
     input:
         aggregate_coas_eggnog_search,

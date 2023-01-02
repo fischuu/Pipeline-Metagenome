@@ -245,7 +245,12 @@ rule all:
       expand("%s/BAM/final.contigs_full/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples),
       expand("%s/BAM/final.contigs_full/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples),
       expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.flagstat" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
-      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)
+      expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam.coverage" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups),
+      expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
+      expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
+      expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
+      expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+
 
 #      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
 #      "%s/CONCOCT/final.contigs.2k_10K.fa" % (config["project-folder"]),

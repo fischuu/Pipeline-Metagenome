@@ -6,6 +6,10 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+27: Adjusted the output paths for the MAG module
+
+26: Fixed a bug in the EGGNOG annotation step, that prevented the annotation to happen...
+
 25: Added the concoct steps for the co-assemblies
 
 24: Some concoct intermediate files are set to temp now
