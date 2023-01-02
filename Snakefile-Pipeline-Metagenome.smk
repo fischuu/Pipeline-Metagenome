@@ -311,11 +311,10 @@ rule quantification:
         
 rule mags:
     input:
-        expand("%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]), fafilter=fafilter),
-        expand("%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
-        expand("%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
-        expand("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
-        expand("%s/CONCOCT/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter)
+        expand("%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
+        expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
 
 ### setup report #####
 report: "report/workflow.rst"

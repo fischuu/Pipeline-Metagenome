@@ -6,7 +6,11 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
-23. Concoct module  for the full assembly finalised
+25: Added the concoct steps for the co-assemblies
+
+24: Some concoct intermediate files are set to temp now
+
+23: Concoct module  for the full assembly finalised
 
 22: Added the --cluster-cancel option to the start script
 

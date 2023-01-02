@@ -5,8 +5,8 @@ rule cut_filtered_contigs_full_concoct:
     input:
         "%s/MEGAHIT/final.contigs.{fafilter}.fa" % (config["project-folder"])
     output:
-        bed="%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]),
-        fa="%s/CONCOCT/final.contigs.{fafilter}_10K.fa" % (config["project-folder"])
+        bed="%s/CONCOCT/INPUT_FILES/final.contigs.{fafilter}_10K.bed" % (config["project-folder"]),
+        fa="%s/CONCOCT/INPUT_FILES/final.contigs.{fafilter}_10K.fa" % (config["project-folder"])
     log:
         "%s/logs/cut_{fafilter}_filtered_contigs_concoct.log" % (config["project-folder"])
     benchmark:
@@ -27,8 +27,8 @@ rule cut_filtered_contigs_coas_concoct:
     input:
         "%s/MEGAHIT/final.contigs.group_{cagroup}.{fafilter}.fa" % (config["project-folder"])
     output:
-        bed="%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]),
-        fa="%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.fa" % (config["project-folder"])
+        bed="%s/CONCOCT/INPUT_FILES/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"]),
+        fa="%s/CONCOCT/INPUT_FILES/final.contigs.group_{cagroup}.{fafilter}_10K.fa" % (config["project-folder"])
     log:
         "%s/logs/cut_{fafilter}_filtered_contigs_group_{cagroup}_concoct.log" % (config["project-folder"])
     benchmark:
@@ -47,11 +47,11 @@ checkpoint cut_input_bed:
     Divide the input bed-file for parallel processing
     """
     input:
-        "%s/CONCOCT/final.contigs.{fafilter}_10K.bed" % (config["project-folder"])
+        "%s/CONCOCT/INPUT_FILES/final.contigs.{fafilter}_10K.bed" % (config["project-folder"])
     output:
-        directory("%s/CONCOCT/bed_subsampled_{fafilter}" % (config["project-folder"])),
+        directory("%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_{fafilter}" % (config["project-folder"])),
     params:
-        out="%s/CONCOCT/bed_subsampled_{fafilter}/final.contigs.{fafilter}_10K." % (config["project-folder"]),
+        out="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_{fafilter}/final.contigs.{fafilter}_10K." % (config["project-folder"]),
         bedcut=config["params"]["concoct"]["bedcut"]
     shell:"""
         mkdir -p {output}
@@ -64,11 +64,11 @@ checkpoint cut_input_coas_bed:
     Divide the input bed-file for parallel processing
     """
     input:
-        "%s/CONCOCT/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"])
+        "%s/CONCOCT/INPUT_FILES/final.contigs.group_{cagroup}.{fafilter}_10K.bed" % (config["project-folder"])
     output:
-        directory("%s/CONCOCT/bed_subsampled_group_{cagroup}_{fafilter}" % (config["project-folder"])),
+        directory("%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_group_{cagroup}_{fafilter}" % (config["project-folder"])),
     params:
-        out="%s/CONCOCT/bed_subsampled_group_{cagroup}_{fafilter}/final.contigs.group_{cagroup}.{fafilter}_10K." % (config["project-folder"]),
+        out="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_group_{cagroup}_{fafilter}/final.contigs.group_{cagroup}.{fafilter}_10K." % (config["project-folder"]),
         bedcut=config["params"]["concoct"]["bedcut"]
     shell:"""
         mkdir -p {output}
@@ -82,11 +82,11 @@ rule process_covTable_bed_parallel:
     Calculate the coverage for the subpart of the splitted bed
     """
     input:
-        bed="%s/CONCOCT/bed_subsampled_{fafilter}/final.contigs.{fafilter}_10K.{i}" % (config["project-folder"]),
+        bed="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_{fafilter}/final.contigs.{fafilter}_10K.{i}" % (config["project-folder"]),
         bam=expand("%s/BAM/final.contigs_full/{samples}_mega.bam" % (config["project-folder"]), samples=samples)    
     output:
-        woheader="%s/CONCOCT/coverage_table_{fafilter}_{i}.tsv" % (config["project-folder"]),
-        header="%s/CONCOCT/coverage_table_{fafilter}_header_{i}.tsv" % (config["project-folder"]),
+        woheader=temp("%s/CONCOCT/coverage_table_{fafilter}_{i}.tsv" % (config["project-folder"])),
+        header=temp("%s/CONCOCT/coverage_table_{fafilter}_header_{i}.tsv" % (config["project-folder"]))
     params:
        bam="%s/BAM/final.contigs_full/*.bam" % (config["project-folder"])
     resources:
@@ -106,11 +106,11 @@ rule process_covTable_bed_coas_parallel:
     Calculate the coverage for the subpart of the splitted bed
     """
     input:
-        bed="%s/CONCOCT/bed_subsampled_group_{cagroup}_{fafilter}/final.contigs.group_{cagroup}.{fafilter}_10K.{i}" % (config["project-folder"]),
+        bed="%s/CONCOCT/BED_SUBSAMPLED/bed_subsampled_group_{cagroup}_{fafilter}/final.contigs.group_{cagroup}.{fafilter}_10K.{i}" % (config["project-folder"]),
         bam=expand("%s/BAM/final.contigs_coas{cagroup}/{samples}_mega.bam" % (config["project-folder"]), samples=samples, cagroup=assemblyGroups)    
     output:
-        woheader="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_{i}.tsv" % (config["project-folder"]),
-        header="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_{i}.tsv" % (config["project-folder"]),
+        woheader=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_{i}.tsv" % (config["project-folder"])),
+        header=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_{i}.tsv" % (config["project-folder"]))
     params:
        bam="%s/BAM/final.contigs_coas{cagroup}/*.bam" % (config["project-folder"])
     resources:
@@ -150,9 +150,9 @@ rule aggregate_coverage_table:
     input:
         aggregate_input_cov
     output:
-        all="%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"]),
-        tmp="%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp" % (config["project-folder"]),
-        tmp2="%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp2" % (config["project-folder"])
+        all="%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"]),
+        tmp=temp("%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp" % (config["project-folder"])),
+        tmp2=temp("%s/CONCOCT/coverage_table_{fafilter}.tsv.tmp2" % (config["project-folder"]))
     params:
         header="%s/CONCOCT/coverage_table_{fafilter}_header_00.tsv" % (config["project-folder"])
     shell:"""
@@ -165,9 +165,9 @@ rule aggregate_coverage_table_coas:
     input:
         aggregate_input_coas_cov
     output:
-        all="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]),
-        tmp="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp" % (config["project-folder"]),
-        tmp2="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp2" % (config["project-folder"])
+        all="%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]),
+        tmp=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp" % (config["project-folder"])),
+        tmp2=temp("%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}.tsv.tmp2" % (config["project-folder"]))
     params:
         header="%s/CONCOCT/coverage_table_group_{cagroup}_{fafilter}_header_00.tsv" % (config["project-folder"])
     shell:"""
@@ -181,10 +181,10 @@ rule run_concoct:
     Apply concoct to the data (CONCOCT).
     """
     input:
-        fa="%s/CONCOCT/final.contigs.{fafilter}_10K.fa" % (config["project-folder"]),
-        coverage="%s/CONCOCT/coverage_table_{fafilter}.tsv" % (config["project-folder"])
+        fa="%s/CONCOCT/INPUT_FILES/final.contigs.{fafilter}_10K.fa" % (config["project-folder"]),
+        coverage="%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
+        "%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
     log:
         "%s/logs/run_concoct_{fafilter}.log" % (config["project-folder"])
     benchmark:
@@ -194,25 +194,67 @@ rule run_concoct:
         mem=cluster["run_concoct"]["mem-per-cpu"]
     threads: cluster["run_concoct"]["cpus-per-task"]
     params:
-       outFolder=directory("%s/CONCOCT/{fafilter}" % (config["project-folder"])),
+       outFolder=directory("%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}" % (config["project-folder"])),
        maxClusters=config["params"]["concoct"]["maxClusters"]
     singularity: config["singularity"]["concoct"]
     shell:"""
       concoct --composition_file {input.fa} --coverage_file {input.coverage} -c {params.maxClusters} -t {threads} -b {params.outFolder} &> {log}
     """
     
+rule run_concoct_coas:
+    """
+    Apply concoct to the data (CONCOCT).
+    """
+    input:
+        fa="%s/CONCOCT/INPUT_FILES/final.contigs.group_{cagroup}.{fafilter}_10K.fa" % (config["project-folder"]),
+        coverage="%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"])
+    output:
+        "%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
+    log:
+        "%s/logs/run_concoct_group_{cagroup}.{fafilter}.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/run_concoct_group_{cagroup}.{fafilter}.tsv" % (config["project-folder"])
+    resources:
+        time=cluster["run_concoct"]["time"],
+        mem=cluster["run_concoct"]["mem-per-cpu"]
+    threads: cluster["run_concoct"]["cpus-per-task"]
+    params:
+       outFolder=directory("%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}" % (config["project-folder"])),
+       maxClusters=config["params"]["concoct"]["maxClusters"]
+    singularity: config["singularity"]["concoct"]
+    shell:"""
+      concoct --composition_file {input.fa} --coverage_file {input.coverage} -c {params.maxClusters} -t {threads} -b {params.outFolder} &> {log}
+    """    
+    
 rule merge_cutup_concoct:
     """
     Merge cutup (CONCOCT).
     """
     input:
-        "%s/CONCOCT/{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
+        "%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
     output:
-        "%s/CONCOCT/{fafilter}_clustering_merged.csv" % (config["project-folder"])
+        "%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}_clustering_merged.csv" % (config["project-folder"])
     log:
         "%s/logs/merge_cutup_concoct_{fafilter}.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/merge_cutup_concoct_{fafilter}.tsv" % (config["project-folder"])
+    singularity: config["singularity"]["concoct"]
+    shell:"""
+      merge_cutup_clustering.py {input} > {output} 2> {log}
+    """
+    
+rule merge_cutup_concoct_coas:
+    """
+    Merge cutup (CONCOCT).
+    """
+    input:
+        "%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}_clustering_gt1000.csv" % (config["project-folder"])
+    output:
+        "%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}_clustering_merged.csv" % (config["project-folder"])
+    log:
+        "%s/logs/merge_cutup_concoct_group_{cagroup}.{fafilter}.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/merge_cutup_concoct_group_{cagroup}.{fafilter}.tsv" % (config["project-folder"])
     singularity: config["singularity"]["concoct"]
     shell:"""
       merge_cutup_clustering.py {input} > {output} 2> {log}
@@ -224,15 +266,37 @@ rule extract_fasta_concoct:
     """
     input:
         fa="%s/MEGAHIT/final.contigs.{fafilter}.fa" % (config["project-folder"]),
-        csv="%s/CONCOCT/{fafilter}_clustering_merged.csv" % (config["project-folder"])
+        csv="%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/{fafilter}_clustering_merged.csv" % (config["project-folder"])
     output:
-        directory("%s/CONCOCT/fasta_bins_{fafilter}" % (config["project-folder"]))
+        directory("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]))
     log:
         "%s/logs/extract_fasta_concoct_{fafilter}.log" % (config["project-folder"])
     benchmark:
         "%s/benchmark/extract_fasta_concoct_{fafilter}.tsv" % (config["project-folder"])
     params:
-        out=directory("%s/CONCOCT/fasta_bins_{fafilter}" % (config["project-folder"]))
+        out=directory("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]))
+    singularity: config["singularity"]["concoct"]
+    shell:"""
+      mkdir -p {params.out}
+      
+      extract_fasta_bins.py {input.fa} {input.csv} --output_path {params.out}
+    """
+    
+rule extract_fasta_concoct_coas:
+    """
+    Extract fasta (CONCOCT).
+    """
+    input:
+        fa="%s/MEGAHIT/final.contigs.group_{cagroup}.{fafilter}.fa" % (config["project-folder"]),
+        csv="%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/Group_{cagroup}.{fafilter}_clustering_merged.csv" % (config["project-folder"])
+    output:
+        directory("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]))
+    log:
+        "%s/logs/extract_fasta_concoct_group_{cagroup}.{fafilter}.log" % (config["project-folder"])
+    benchmark:
+        "%s/benchmark/extract_fasta_concoct_group_{cagroup}.{fafilter}.tsv" % (config["project-folder"])
+    params:
+        out=directory("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]))
     singularity: config["singularity"]["concoct"]
     shell:"""
       mkdir -p {params.out}
