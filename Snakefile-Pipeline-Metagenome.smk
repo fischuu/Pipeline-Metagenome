@@ -316,8 +316,8 @@ rule quantification:
         
 rule mags:
     input:
-        expand("%s/CONCOCT/OUTPUT/final.contigs.{fafilter}/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
-        expand("%s/CONCOCT/OUTPUT/final.contigs.group_{cagroup}.{fafilter}/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
+        expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
+        expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
 
