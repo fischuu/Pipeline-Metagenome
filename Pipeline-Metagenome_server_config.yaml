@@ -324,15 +324,15 @@ run_concoct:
     job-name: run_concoct
     partition: longrun
     time: 6-00:00:00
-    mem-per-cpu: 8000
-    cpus-per-task: 40
+    mem-per-cpu: 16000
+    cpus-per-task: 20
     
 run_concoct_coas:
     job-name: run_concoct_coas
     partition: longrun
     time: 6-00:00:00
-    mem-per-cpu: 8000
-    cpus-per-task: 40
+    mem-per-cpu: 16000
+    cpus-per-task: 20
     
 extract_fasta_concoct:
     job-name: extract_fasta_concoct
