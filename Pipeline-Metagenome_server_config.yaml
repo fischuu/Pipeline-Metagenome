@@ -16,6 +16,19 @@ star_create_host_index:
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    
+create_index_bowtie2_full:
+    job-name: create_index_bowtie2_full
+    time: 0-10:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+create_index_bowtie2_coas:
+    job-name: create_index_bowtie2_coas
+    time: 0-10:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
 
 # Step2 - ReadProcessing
 ################################################################################
@@ -39,7 +52,7 @@ star_map_reads_host:
 
 concatenate_inputfiles_cat:
     job-name:  concatenate_inputfiles_cat
-    time: 04:00:00
+    time: 2-00:00:00
     mem-per-cpu: 64000
     cpus-per-task: 1
 
@@ -51,20 +64,91 @@ build_contamination_indices:
 
 star_decontaminate_reads:
     job-name: star_decontaminate_reads
+    time: 1-00:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+# Step 2c - QC
+################################################################################
+fastqc_quality_control_raw_data_r1:
+    job-name: fastqc_quality_control_raw_data_r1
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
+    
+multiqc_quality_control_raw_data_r1:
+    job-name: multiqc_quality_control_raw_data_r1
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+    
+qualDist_raw_data:
+    job-name: qualDist_raw_data
+    time: 04:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 1
+    
+fastqc_quality_control_concatenated_data:
+    job-name: fastqc_quality_control_concatenated_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+multiqc_quality_control_concatenated_data:
+    job-name: multiqc_quality_control_concatenated_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
+qualDist_concatenated_data:
+    job-name: qualDist_concatenated_data
+    time: 04:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 1
+
+fastqc_quality_control_trimmed_data:
+    job-name: fastqc_quality_control_trimmed_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+multiqc_quality_control_trimmed_data:
+    job-name: multiqc_quality_control_trimmed_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
+qualDist_trimmed_data:
+    job-name: qualDist_trimmed_data
+    time: 04:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 1
+
 
 # Step 3 - 
 ################################################################################
 assemble_contigs_megahit:
     job-name: assemble_contigs_megahit
-    time: 04:00:00
-    mem-per-cpu: 4000
-    cpus-per-task: 20
+    time: 14-00:00:00
+    mem-per-cpu: 30000
+    cpus-per-task: 40
+    partition: hugemem_longrun
 
-filter_length_megahit:
-    job-name: filter_length_megahit
+assemble_coassembly_contigs_megahit:
+    job-name: assemble_coassembly_contigs_megahit
+    time: 10-00:00:00
+    mem-per-cpu: 20000
+    cpus-per-task: 40
+    partition: hugemem_longrun
+
+filter_length_full_megahit:
+    job-name: filter_length_full_megahit
+    time: 04:00:00
+    mem-per-cpu: 64000
+    cpus-per-task: 1
+
+filter_length_coas_megahit:
+    job-name: filter_length_coas_megahit
     time: 04:00:00
     mem-per-cpu: 64000
     cpus-per-task: 1
@@ -75,28 +159,76 @@ create_index_bowtie2:
     mem-per-cpu: 4000
     cpus-per-task: 20
 
-map_data_metagenome_bowtie2:
-    job-name: map_data_metagenome_bowtie2
+map_data_final_contigs_full_bowtie2:
+    job-name: map_data_final_contigs_full_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+map_data_final_contigs_coas_bowtie2:
+    job-name: map_data_final_contigs_coas_bowtie2
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
 
+# Step 3b -
+################################################################################
+    
+check_assemblies:
+    job-name: check_assemblies
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+# Step 3c - Read alignments to reference genome
+################################################################################
+
+map_data_final_contigs_full_bowtie2:
+    job-name: map_data_final_contigs_full_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+map_data_final_contigs_coas_bowtie2:
+    job-name: map_data_final_contigs_coas_bowtie2
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20    
+
 samToBam_data_metagenome:
     job-name: samToBam_data_metagenome
-    time: 01:00:00
+    time: 0-10:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1
+
+samToBam_data_metagenome_coas:
+    job-name: samToBam_data_metagenome_coas
+    time: 0-10:00:00
     mem-per-cpu: 32000
     cpus-per-task: 1
     
 # Step 4 -
 ################################################################################
-prodigal_gene_prediction:
-    job-name: prodigal_gene_prediction
-    time: 04:00:00
+prodigal_full_gene_prediction:
+    job-name: prodigal_full_gene_prediction
+    time: 1-00:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    
+prodigal_coas_gene_prediction:
+    job-name: prodigal_coas_gene_prediction
+    time: 1-00:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
 
-cut_prodigal_bash:
-    job-name: cut_prodigal_bash
+cut_prodigal_full_bash:
+    job-name: cut_prodigal_full_bash
+    time: 04:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+    
+cut_prodigal_coas_bash:
+    job-name: cut_prodigal_full_bash
     time: 04:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
@@ -107,27 +239,62 @@ prepare_eggnog_database:
     mem-per-cpu: 16000
     cpus-per-task: 1
     
-eggnog_find_homology_parallel:
-    job-name: eggnog_find_homology_parallel
+eggnog_find_homology_parallel_full:
+    job-name: eggnog_find_homology_parallel_full
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     nvme: 180
     
-eggnog_orthology:
-    job-name: eggnog_orthology
+eggnog_find_homology_parallel_coas:
+    job-name: eggnog_find_homology_parallel_coas
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    nvme: 180
+
+eggnog_full_orthology:
+    job-name: eggnog_full_orthology
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+    nvme: 180
+
+eggnog_coas_orthology:
+    job-name: eggnog_coas_orthology
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     nvme: 180
     
-quantify_predictedGenes_featureCounts:
-    job-name: quantify_predictedGenes_featureCounts
+# Step 5 - Quantification
+################################################################################
+
+quantify_full_predictedGenes_featureCounts:
+    job-name: quantify_full_predictedGenes_featureCounts
     time: 04:00:00
     mem-per-cpu: 4000
     cpus-per-task: 20
     
-# Step 5- MAGs
+quantify_coas_predictedGenes_featureCounts:
+    job-name: quantify_coas_predictedGenes_featureCounts
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20    
+
+Full_AlignmentStats:
+    job-name: Full_AlignmentStats
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1   
+    
+Coas_AlignmentStats:
+    job-name: Coas_AlignmentStats
+    time: 01:00:00
+    mem-per-cpu: 32000
+    cpus-per-task: 1   
+
+# Step 6- MAGs
 ################################################################################
 cut_filtered_contigs_concoct:
     job-name: cut_filtered_contigs_concoct
@@ -135,33 +302,44 @@ cut_filtered_contigs_concoct:
     mem-per-cpu: 16000
     cpus-per-task: 1
     
-process_covTable_bed_parallel:
-    job-name: process_covTable_bed_parallel
+cut_filtered_contigs_coas_concoct:
+    job-name: cut_filtered_contigs_coas_concoct
     time: 04:00:00
     mem-per-cpu: 16000
     cpus-per-task: 1
     
-run_concoct_1k:
-    job-name: run_concoct_1k
-    time: 04:00:00
-    mem-per-cpu: 4000
-    cpus-per-task: 40
-    
-run_concoct_2k:
-    job-name: run_concoct_2k
-    time: 04:00:00
-    mem-per-cpu: 4000
-    cpus-per-task: 40
-    
-extract_fasta_concoct_1k:
-    job-name: extract_fasta_concoct_1k
-    time: 04:00:00
-    mem-per-cpu: 32000
+process_covTable_bed_parallel:
+    job-name: process_covTable_bed_parallel
+    time: 08:00:00
+    mem-per-cpu: 16000
     cpus-per-task: 1
     
-extract_fasta_concoct_2k:
-    job-name: extract_fasta_concoct_2k
-    time: 04:00:00
-    mem-per-cpu: 32000
-    cpus-per-task: 1    
+process_covTable_bed_coas_parallel:
+    job-name: process_covTable_bed_coas_parallel
+    time: 08:00:00
+    mem-per-cpu: 16000
+    cpus-per-task: 1
+
+run_concoct:
+    job-name: run_concoct
+    time: 3-00:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 30
     
+run_concoct_coas:
+    job-name: run_concoct_coas
+    time: 3-00:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 30
+    
+extract_fasta_concoct:
+    job-name: extract_fasta_concoct
+    time: 0-10:00:00
+    mem-per-cpu: 84000
+    cpus-per-task: 1
+    
+extract_fasta_concoct_coas:
+    job-name: extract_fasta_concoct_coas
+    time: 0-10:00:00
+    mem-per-cpu: 84000
+    cpus-per-task: 1
