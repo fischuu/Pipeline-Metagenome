@@ -7,6 +7,7 @@ rule prodigal_full_gene_prediction:
     output:
         fa="%s/PRODIGAL/final.contigs_full/final.contigs_full.prodigal.fa" % (config["project-folder"]),
         gtf="%s/PRODIGAL/final.contigs_full/final.contigs_full.prodigal.gtf" % (config["project-folder"]),
+        gtfplain="%s/PRODIGAL/final.contigs_full/final.contigs_full.prodigal_plain.gtf" % (config["project-folder"])
     log:
         "%s/logs/prodigal_full_gene_prediction.log" % (config["project-folder"])
     benchmark:
@@ -21,6 +22,8 @@ rule prodigal_full_gene_prediction:
                   -o {output.gtf} \
                   -a {output.fa} \
                   -p meta -f gff    
+                  
+         sed '/^#/d' {output.gtf} > {output.gtfplain}
     """
     
 rule prodigal_coas_gene_prediction:
@@ -32,6 +35,7 @@ rule prodigal_coas_gene_prediction:
     output:
         fa="%s/PRODIGAL/final.contigs_group_{cagroup}/final.contigs_group_{cagroup}.prodigal.fa" % (config["project-folder"]),
         gtf="%s/PRODIGAL/final.contigs_group_{cagroup}/final.contigs_group_{cagroup}.prodigal.gtf" % (config["project-folder"]),
+        gtfplain="%s/PRODIGAL/final.contigs_group_{cagroup}/final.contigs_group_{cagroup}.prodigal_plain.gtf" % (config["project-folder"]),
     log:
         "%s/logs/prodigal_group_{cagroup}_gene_prediction.log" % (config["project-folder"])
     benchmark:
@@ -46,6 +50,8 @@ rule prodigal_coas_gene_prediction:
                   -o {output.gtf} \
                   -a {output.fa} \
                   -p meta -f gff    
+                  
+         sed '/^#/d' {output.gtf} > {output.gtfplain}
     """
     
 checkpoint cut_prodigal_full_bash:

@@ -130,16 +130,16 @@ qualDist_trimmed_data:
 assemble_contigs_megahit:
     job-name: assemble_contigs_megahit
     time: 14-00:00:00
-    mem-per-cpu: 60000
-    cpus-per-task: 20
+    mem-per-cpu: 30000
+    cpus-per-task: 40
     partition: hugemem_longrun
 
 assemble_coassembly_contigs_megahit:
     job-name: assemble_coassembly_contigs_megahit
-    time: 3-00:00:00
-    mem-per-cpu: 30000
-    cpus-per-task: 20
-    partition: hugemem
+    time: 10-00:00:00
+    mem-per-cpu: 20000
+    cpus-per-task: 40
+    partition: hugemem_longrun
 
 filter_length_full_megahit:
     job-name: filter_length_full_megahit
@@ -322,17 +322,15 @@ process_covTable_bed_coas_parallel:
 
 run_concoct:
     job-name: run_concoct
-    partition: longrun
-    time: 6-00:00:00
-    mem-per-cpu: 16000
-    cpus-per-task: 20
+    time: 3-00:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 30
     
 run_concoct_coas:
     job-name: run_concoct_coas
-    partition: longrun
-    time: 6-00:00:00
-    mem-per-cpu: 16000
-    cpus-per-task: 20
+    time: 3-00:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 30
     
 extract_fasta_concoct:
     job-name: extract_fasta_concoct
@@ -340,3 +338,8 @@ extract_fasta_concoct:
     mem-per-cpu: 84000
     cpus-per-task: 1
     
+extract_fasta_concoct_coas:
+    job-name: extract_fasta_concoct_coas
+    time: 0-10:00:00
+    mem-per-cpu: 84000
+    cpus-per-task: 1

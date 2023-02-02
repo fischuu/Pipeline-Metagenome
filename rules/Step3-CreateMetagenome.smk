@@ -17,8 +17,10 @@ rule assemble_contigs_megahit:
         time=cluster["assemble_contigs_megahit"]["time"],
         mem=cluster["assemble_contigs_megahit"]["mem-per-cpu"]
     threads: cluster["assemble_contigs_megahit"]["cpus-per-task"]
+    params:
+        kmin=config["params"]["megahit"]["kmin"]
     shell:"""
-        megahit -1 {input.r1}  -2 {input.r2} -t {threads}  -o {output.temp_dir} &> {log};
+        megahit -1 {input.r1}  -2 {input.r2} -t {threads} --k-min {params.kmin}  -o {output.temp_dir} &> {log};
         
         mv {output.temp_dir}/final.contigs.fa {output.contigs};
     """

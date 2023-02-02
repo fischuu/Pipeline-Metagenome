@@ -6,6 +6,10 @@
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
+29: Added sed command to remove comment lines from the prodigal gene prediction
+
+28: Added the k-min option for megahit to avoid crashes in case of deep sequenced genomes
+
 27: Adjusted the output paths for the MAG module
 
 26: Fixed a bug in the EGGNOG annotation step, that prevented the annotation to happen...
