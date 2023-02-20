@@ -5,7 +5,7 @@ pipeline-config: "Snakebite-Metagenomics_config.yaml"
 server-config: "Snakebite-Metagenomics_server_config.yaml"
 samplesheet-file: "samplesheet.tsv"
 local-scratch: $LOCAL_SCRATCH
-tmp: "/scratch/prject..."
+tmp: "/scratch/project_200XXXX/tmp"
 contamination-folder: "Contamination/"
 contamination-refs: ["ARS-UCD1.2_Btau5.0.1Y.fa"]
 
