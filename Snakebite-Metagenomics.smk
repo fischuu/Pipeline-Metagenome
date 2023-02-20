@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.23
-version = "0.3.23"
+##### Version: 0.4
+version = "0.4"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -198,7 +198,7 @@ config["singularity"]["quast"] = "docker://fischuu/quast:5.2.0-0.2"
 
 ##### Print the welcome screen #####
 print("#################################################################################")
-print("##### Welcome to the Metagenome pipeline")
+print("##### Welcome to the Snakebite - Metagenomics pipeline")
 print("##### version: "+version)
 print("##### Number of rawsamples : "+str(len(rawsamples)))
 print("##### Number of samples    : "+str(len(samples)))
