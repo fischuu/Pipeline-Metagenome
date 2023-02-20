@@ -4,7 +4,11 @@
 
 ## UPDATES
 
-### Release version 0.4: Contains all previous changes
+### Release version 0.4:
+
+* Contains all previous changes
+
+* First release under new Snakebite label
 
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
