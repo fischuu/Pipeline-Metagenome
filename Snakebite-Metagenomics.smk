@@ -11,7 +11,7 @@ from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
 HTTP = HTTPRemoteProvider()
 shell.executable("bash")
 
-##### Metagenome Snakemake Pipeline              #####
+##### Metagenomics Snakemake Pipeline              #####
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
