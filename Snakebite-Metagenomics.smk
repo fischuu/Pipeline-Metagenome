@@ -37,6 +37,9 @@ if(config["server-config"][0]!='/'):
 if(config["rawdata-folder"][0]!='/'):
     config["rawdata-folder"] = config["project-folder"] + '/' + config["rawdata-folder"]
 
+if(config["contamination-folder"][0]!='/'):
+    config["contamination-folder"] = config["project-folder"] + '/' + config["contamination-folder"]
+      
 if(config["samplesheet-file"][0]!='/'):
     config["samplesheet-file"] = config["project-folder"] + '/' + config["samplesheet-file"]
     
