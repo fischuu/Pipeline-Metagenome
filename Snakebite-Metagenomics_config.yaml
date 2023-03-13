@@ -4,6 +4,7 @@ rawdata-folder: "FASTQ/RAW"
 pipeline-config: "Snakebite-Metagenomics_config.yaml"
 server-config: "Snakebite-Metagenomics_server_config.yaml"
 samplesheet-file: "samplesheet.tsv"
+sampleinfo-file: ""
 local-scratch: $LOCAL_SCRATCH
 tmp: "/scratch/project_200XXXX/tmp"
 contamination-folder: "Contamination/"

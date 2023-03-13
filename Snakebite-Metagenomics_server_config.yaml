@@ -124,6 +124,24 @@ qualDist_trimmed_data:
     mem-per-cpu: 12000
     cpus-per-task: 1
 
+fastqc_quality_control_decontaminated_data:
+    job-name: fastqc_quality_control_decontaminated_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 20
+
+multiqc_quality_control_decontaminated_data:
+    job-name: multiqc_quality_control_decontaminated_data
+    time: 04:00:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
+qualDist_decontaminated_data:
+    job-name: qualDist_decontaminated_data
+    time: 04:00:00
+    mem-per-cpu: 12000
+    cpus-per-task: 1
+
 
 # Step 3 - 
 ################################################################################
@@ -344,11 +362,20 @@ extract_fasta_concoct_coas:
     mem-per-cpu: 84000
     cpus-per-task: 1
 
-# Step 7- R
+# Step 7 - R
 ################################################################################
 R_createSummaries_file:
     job-name: R_createSummaries_file
     time: 0-10:00:00
     mem-per-cpu: 84000
     cpus-per-task: 1
+
+# Step 8 - Reporting
+################################################################################
+R_finalReport:
+    job-name: R_finalReport
+    time: 0-00:10:00
+    mem-per-cpu: 4000
+    cpus-per-task: 1
+
 

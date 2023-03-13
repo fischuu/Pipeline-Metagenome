@@ -5,7 +5,11 @@ last_n_char <- function(x, n=1){
 if(last_n_char(pipelineFolder)!="/") pipelineFolder <- paste0(pipelineFolder, "/")
 
 createRMD.command <- paste0("cat ",pipelineFolder,"scripts/Rmd/final-header.Rmd ",
-                                     "> ",projFolder,"/finalReport.Rmd")
+                                   pipelineFolder,"scripts/Rmd/helpFunctions.Rmd ",
+                                   pipelineFolder,"scripts/Rmd/generalWorkflow.Rmd ",
+                                   pipelineFolder,"scripts/Rmd/basicStats.Rmd ",
+                                   pipelineFolder,"scripts/Rmd/QC.Rmd ",
+                                   "> ",projFolder,"/finalReport.Rmd")
 
 
 cat(createRMD.command, "\n")

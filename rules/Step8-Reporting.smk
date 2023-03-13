@@ -3,7 +3,15 @@ rule R_finalReport:
     Create the final report (R).
     """
     input:
-        script=config["report-script"],
+  #      "%s/QC/RAW/multiqc_R1/" % (config["project-folder"]),
+  #      "%s/QC/CONCATENATED/multiqc_R1/" % (config["project-folder"]),
+  #      "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
+  #      "%s/QC/DECONTAMINATED/multiqc_R1/" % (config["project-folder"]),
+  #      expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
+  #      expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+  #      expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+  #      expand("%s/QC/DECONTAMINATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+        script=config["report-script"]
     output:
         "%s/finalReport.html" % (config["project-folder"])
     log:

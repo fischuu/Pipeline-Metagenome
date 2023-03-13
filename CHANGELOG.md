@@ -6,7 +6,17 @@
 
 ### Development version 0.5.*:
 --------------------------------------------------------------------------------
-2: Added the templete to prepare the summary statistics
+7: Added the QC part to the final report
+
+6: Added the basicStats section to the final report
+
+5: Added the general workflow section to the final report
+
+4: Added the helpFunctions section to the final report
+
+3: Now is the default server configuration expected to be in the project folder
+
+2: Added the template to prepare the summary statistics
 
 1: Added the final report template
 

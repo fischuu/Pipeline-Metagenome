@@ -275,9 +275,11 @@ rule qc:
         "%s/QC/RAW/multiqc_R1/" % (config["project-folder"]),
         "%s/QC/CONCATENATED/multiqc_R1/" % (config["project-folder"]),
         "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
+        "%s/QC/DECONTAMINATED/multiqc_R1/" % (config["project-folder"]),
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
         expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
-        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
+        expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+        expand("%s/QC/DECONTAMINATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
 
 rule decontaminate:
     input:
@@ -325,6 +327,10 @@ rule mags:
         expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+
+rule summaries:
+    input:
+        "%s/RESULTS/summary.tsv" % (config["project-folder"])
 
 rule report:
     input:

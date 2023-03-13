@@ -1,0 +1,13 @@
+# General workflow
+
+## Directed acyclic graph (DAG)
+
+In Snakemake, a directed acyclic graph (DAG) is a graphical representation of the dependencies between the rules or tasks in a Snakemake workflow. The nodes in the DAG represent the rules or tasks, and the edges between the nodes represent the dependencies between them.
+
+The DAG is constructed automatically by Snakemake based on the dependencies specified in the Snakefile, a file containing the rules and dependencies for a Snakemake workflow. When a rule is specified in the Snakefile, it is added to the DAG as a node. If the rule has dependencies on other rules, those dependencies are added to the DAG as edges between the nodes.
+
+The DAG is used by Snakemake to determine the order in which the rules or tasks should be executed. It ensures that the rules are executed in a way that satisfies all of the dependencies between them, and that no rule is executed before all of its dependencies have been completed.
+
+```{r import workflow, echo=FALSE, fig.cap="Overview of the applied workflow", out.width = '100%'}
+if(file.exists(file.path(projFolder,"workflow.png"))) knitr::include_graphics(file.path(projFolder,"workflow.png"))
+```

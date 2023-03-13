@@ -1,0 +1,264 @@
+
+```{r setup, include=FALSE}
+.libPaths()
+library("GenomicTools")
+library("Luke")
+library("xtable")   # Needed for LaTeX output of the tables
+library("viridis")  # Needed for the colouring of the plots
+library("rjson")    # Needed for multiqc dgsb etail data
+library("adegenet")
+library("vcfR")
+library("DT")
+library("kableExtra")
+library("ICS")
+library("tsne")
+#library("lle")
+library("kernlab")
+#library("REPPlab")
+#library("RDRToolbox")
+library("destiny")
+library("ggplot2")
+
+options(scipen=999,
+        stringsAsFactors=FALSE)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      cache.lazy = FALSE,
+                      dev = c('png', 'pdf'),
+                      fig.align = 'center', fig.height = 5, fig.width = 8.5)
+
+report.colours <-c("#FF8200", "#00B5E2", "#78BE20", "#7F3F98", "#E13C98", "#0033A0", "#54585A")
+
+# To run locally on terminal type this command in the pipeline folder:
+# R -e "rmarkdown::render('./scripts/workflow-report.Rmd',output_file='./finalReport.html')"
+
+if(!is.element("snakemake",ls())){
+  projFolder <- ""
+  pipelineFolder <- ""
+  pipelineConfig.file <- ""
+  serverConfig.file <- ""
+}
+```
+
+```{r help functions}
+
+stepMean <-  function(x, y, step = 30000) {
+  rx <- range(x)
+  locs <- seq(1, max(rx), step)
+  pos <- (locs[-1] + locs[-length(locs)]) / 2
+  
+  intervals <- cut(x, breaks = locs, include.lowest = TRUE)
+  out <- tapply(y, intervals, mean)
+  out[is.na(out)] <- 0
+  
+  cbind(pos, out)
+}
+
+
+  gini <- function (x, w=NULL){
+    
+    if (is.null(w))
+      w <- rep(1, length(x))
+    x.sort <- sort(x)
+    x.order <- order(x)
+    x <- x.sort
+    n <- length(x)
+    w <- w[x.order]/sum(w)
+    w.c <- cumsum(w)
+    xw.c <- cumsum(w * x)
+    xw.c <- xw.c/xw.c[n]
+    Gini <- t(xw.c[-1]) %*% w.c[-n] - t(xw.c[-n]) %*% w.c[-1]
+    res <- Gini * 1/(1 - sum(w^2))
+    
+    return( pmax(0, res))
+  }
+
+vectorToDF.int <- function(x, sep=" ", names=NULL, autoCoerc=TRUE){
+  x.split <- strsplit(x, sep)
+  no.columns <- length(x.split[[1]])
+  no.rows <- length(x.split)
+  out <- as.data.frame(matrix(NA, ncol=no.columns, nrow=no.rows))
+  for(i in 1:no.columns){
+    out[,i] <- sapply(x.split,"[", i)
+  }
+  names(out) <- names
+  if(autoCoerc){
+    for(i in 1:no.columns){
+      ac <- suppressWarnings(as.numeric(out[1,i]))
+      if(!is.na(ac)){
+      out[,i] <- as.numeric(out[,i])
+      }
+      
+    }
+  }
+  out
+}
+
+
+getConfigField <- function(x, from=pipelineConfig){
+  out <- c()
+  
+  x <- trimws(paste0("^",x))
+  
+  if(length(x)==1){
+    pos <- grep(x, from)
+    out <- from[pos]
+   
+    out <- trimws(out)
+    out <- gsub(paste0("^",x), "", out)
+    out <- gsub('\"','',out)
+    out <- gsub(' ','',out)
+    out <- gsub(':','',out)
+    out <- gsub('#.*','',out)
+  } else {
+    # Get here the part for the subfields
+    
+  }
+  
+  out
+}
+
+class.table <- function(x, classes=NULL){
+  if(is.null(classes)){
+    out <- table(x)
+  } else {
+    out <- rep(0, length(classes))
+    for(i in 1:length(classes)){
+      out[i] <- sum(x==classes[i])
+    }
+    names(out) <- classes
+  }
+  out
+}
+
+# alternative colours c(viridis(20)[8], viridis(20)[16])
+plotFastQCFeature <- function(x,y=NULL, labels=c("R1", "R2"), col=c(report.colours[1], report.colours[2]), feature="total_deduplicated_percentage", axes=TRUE){
+  x.values <- as.vector(as.matrix(x[feature]))
+  if(!is.null(y)) y.values <- as.vector(as.matrix(y[feature]))
+  
+  if(feature=="total_deduplicated_percentage"){
+    label <- "De-Duplication level in %"
+  } else if (feature=="X.GC"){
+    label <- "GC content in %"
+  } else if (feature=="avg_sequence_length"){
+    label <- "Feature length"
+  } else if (feature=="Total.Sequences"){
+    label <- "Total sequences"
+  }
+  
+  if(is.null(y)){
+    barplot(rbind(x.values), beside=TRUE, ylab=label, col=col[1])  
+  } else {
+    barplot(rbind(x.values, y.values), beside=TRUE, ylab=label, col=col)    
+  }
+
+
+  if(axes) axis(1, at=seq(2,3*nrow(x), by=3), paste(substr(x$Sample,1,10),"..."), las=2, cex=0.1)
+  
+  if(is.null(y)){
+    labels <- "R1"
+    legend("bottomright", pch=c(20,20), col=col[1], legend=labels, fill="white")
+  } else {
+    legend("bottomright", pch=c(20,20), col=col, legend=labels, fill="white")    
+  }
+
+}
+
+plotFastQCJSONFeature <- function(x,y, labels, feature){
+  par(mfrow=c(1,2))
+  ymax <- max(rbind(x[feature][[1]],y[feature][[1]]))
+  ymax <- ceiling(ymax+ymax*0.1)
+  if(feature=="sequenceQuality") ymax <- 40
+  boxplot(t(x[feature][[1]]), ylim=c(0,ymax))
+  boxplot(t(y[feature][[1]]), ylim=c(0,ymax))
+}
+
+plotMQCFeature <- function(x, y, labels, feature){
+  
+  result1 <- fromJSON(file=file.path(x,"multiqc_data","multiqc_data.json"))
+  result2 <- fromJSON(file=file.path(y,"multiqc_data","multiqc_data.json"))
+  
+  data1 <- get(feature, result1$report_plot_data)$datasets[[1]]
+  data2 <- get(feature, result2$report_plot_data)$datasets[[1]]
+  
+  pos1 <-  length(sapply(data1,"[",2)[[1]]) - 1
+  pos2 <-  length(sapply(data2,"[",2)[[1]]) - 1
+  
+  obs1 <- length(sapply(sapply(sapply(data1,"[",2),"[",1),"[",2))
+  obs2 <- length(sapply(sapply(sapply(data2,"[",2),"[",1),"[",2))
+
+  plotData1 <- matrix(-1, ncol=pos1, nrow=obs1)
+  tmp <- sapply(sapply(data1,"[",2)[[1]],"[",1) 
+  colnames(plotData1) <-  tmp[-length(tmp)]
+  
+  plotData2 <- matrix(-1, ncol=pos2, nrow=obs2)
+  tmp <- sapply(sapply(data2,"[",2)[[1]],"[",1)
+  colnames(plotData2) <- tmp[-length(tmp)]
+  
+  for(i in 1:pos1){
+    tmp <- sapply(sapply(sapply(data1,"[",2),"[",i),"[",2)
+    if(class(tmp)=="list") tmp <- unlist(tmp)
+
+  # In case we have missing data, fill it up with zero
+    missing <- nrow(plotData1) - length(tmp)
+    if(missing>0) tmp <- c(tmp, rep(0, missing))
+
+    plotData1[,i] <- tmp
+  }
+  
+  for(i in 1:pos2){
+    tmp <- sapply(sapply(sapply(data2,"[",2),"[",i),"[",2)
+    if(class(tmp)=="list") tmp <- unlist(tmp)
+
+    # In case we have missing data, fill it up with zero
+    missing <- nrow(plotData1) - length(tmp)
+    if(missing>0) tmp <- c(tmp, rep(0, missing))
+
+    plotData2[,i] <- tmp
+    
+  }
+
+  par(mfrow=c(1,2))
+  ymax1 <- max(plotData1)
+  ymax2 <- max(plotData2)
+  ymax <- max(ymax1, ymax2)
+  ymax <- ceiling(ymax+ymax*0.1)
+  
+  if(feature=="sequenceQuality") ymax <- 40
+  boxplot(plotData1, ylim=c(0,ymax), pch=".", xaxt="n")
+  #  axis(1,at=2:ncol(data1),gsub("X","",colnames(data1)[-1]))
+  boxplot(plotData2, ylim=c(0,ymax), pch=".", xaxt="n")
+  #  axis(1,at=2:ncol(data2),gsub("X","",colnames(data2)[-1]))
+}
+
+```
+
+
+```{r help function 2}
+getFastQCJSON <- function(path){
+  
+  x_file <- file.path(path)
+  x <- fromJSON(paste(readLines(x_file), collapse=""))
+
+  tmp <- x$report_plot_data$fastqc_per_base_sequence_quality_plot$datasets[[1]]
+  datapoints <- length(tmp[[1]]$data)
+  sequenceQuality <- matrix(-1, nrow= datapoints, ncol=length(tmp))
+  rownames(sequenceQuality) <- sapply(tmp[[1]]$data,"[",1)
+  for(i in 1:length(tmp)){
+    sequenceQuality[,i] <- sapply(tmp[[i]]$data,"[",2)[1:datapoints]
+  }  
+  
+  tmp <- x$report_plot_data$fastqc_per_base_n_content_plot$datasets[[1]]
+  perBaseN <- matrix(-1, nrow= length(tmp[[1]]$data), ncol=length(tmp))
+  rownames(perBaseN) <- sapply(tmp[[1]]$data,"[",1)
+  for(i in 1:length(tmp)){
+    perBaseN[,i] <- sapply(tmp[[i]]$data,"[",2)[1:datapoints]
+  }
+  
+  output <- list(sequenceQuality=sequenceQuality,
+                 perBaseN=perBaseN)
+  output
+}
+```
+

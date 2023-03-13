@@ -16,9 +16,9 @@ snakemake -s $pipelineFolder/Snakebite-Metagenomics.smk \
 snakemake -s $pipelineFolder/Snakebite-Metagenomics.smk \
           -j 300 \
           --use-singularity \
-          --singularity-args "-B /scratch:/scratch,/run:/run" \
+          --singularity-args "-B /scratch:/scratch,/run:/run,/users:/users" \
           --configfile $projectFolder/Snakebite-Metagenomics_config.yaml \
           --latency-wait 60 \
-          --cluster-config $pipelineFolder/Snakebite-Metagenomics_server_config.yaml \
+          --cluster-config $projectFolder/Snakebite-Metagenomics_server_config.yaml \
           --cluster "sbatch -t {cluster.time} --account={cluster.account} --gres=nvme:{cluster.nvme} --job-name={cluster.job-name} --tasks-per-node={cluster.ntasks} --cpus-per-task={cluster.cpus-per-task} --mem-per-cpu={cluster.mem-per-cpu} -p {cluster.partition} -D {cluster.working-directory} --parsable" \
           --cluster-cancel scancel $@
