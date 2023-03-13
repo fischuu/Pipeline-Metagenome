@@ -343,3 +343,12 @@ extract_fasta_concoct_coas:
     time: 0-10:00:00
     mem-per-cpu: 84000
     cpus-per-task: 1
+
+# Step 7- R
+################################################################################
+R_createSummaries_file:
+    job-name: R_createSummaries_file
+    time: 0-10:00:00
+    mem-per-cpu: 84000
+    cpus-per-task: 1
+

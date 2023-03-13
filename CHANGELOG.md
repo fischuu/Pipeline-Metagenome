@@ -4,6 +4,16 @@
 
 ## UPDATES
 
+### Development version 0.5.*:
+--------------------------------------------------------------------------------
+2: Added the templete to prepare the summary statistics
+
+1: Added the final report template
+
+
+### Release version 0.4:
+--------------------------------------------------------------------------------
+
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
 29: Added sed command to remove comment lines from the prodigal gene prediction

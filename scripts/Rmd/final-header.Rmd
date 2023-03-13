@@ -1,0 +1,16 @@
+---
+title: "Metagenomics-Pipeline report"
+subtitle: "Final Report"
+author: "Daniel Fischer"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      toc_collapsed: true
+    number_sections: true
+    theme: lumen
+    df_print: paged
+    code_folding: show
+---

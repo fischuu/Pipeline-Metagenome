@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.4
-version = "0.4"
+##### Version: 0.5.2
+version = "0.5.2"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -65,7 +65,8 @@ fafilter = ["1k", "2k"]
 workdir: config["project-folder"]
 
 ##### Complete the input configuration
-config["report-script"] = config["pipeline-folder"]+"/scripts/workflow-report.Rmd"
+config["report-script"] = config["pipeline-folder"]+"/scripts/R/Final-report.R"
+config["summary-script"] = config["pipeline-folder"]+"/scripts/R/Summary-script.R"
 
 wildcard_constraints:
     rawsamples="|".join(rawsamples),
@@ -252,7 +253,8 @@ rule all:
       expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_{fafilter}.tsv" % (config["project-folder"]), fafilter=fafilter),
       expand("%s/CONCOCT/COVERAGE_TABLE/coverage_table_group_{cagroup}_{fafilter}.tsv" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
       expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
-      expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
+      expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter),
+      "%s/finalReport.html" % (config["project-folder"])
 
 
 #      "%s/CONCOCT/final.contigs.1k_10K.fa" % (config["project-folder"]),
@@ -324,6 +326,10 @@ rule mags:
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_{fafilter}" % (config["project-folder"]), fafilter=fafilter),
         expand("%s/CONCOCT/FASTA_BINS/fasta_bins_group_{cagroup}.{fafilter}" % (config["project-folder"]), cagroup=assemblyGroups, fafilter=fafilter)
 
+rule report:
+    input:
+        "%s/finalReport.html" % (config["project-folder"])
+
 ### setup report #####
 report: "report/workflow.rst"
 
@@ -338,3 +344,5 @@ include: "rules/Step3c-ReadAlignments.smk"
 include: "rules/Step4-GenePrediction.smk"
 include: "rules/Step5-Quantification.smk"
 include: "rules/Step6-MAGs.smk"
+include: "rules/Step7-R.smk"
+include: "rules/Step8-Reporting.smk"
