@@ -4,12 +4,6 @@
 
 ## UPDATES
 
-### Release version 0.4:
-
-* Contains all previous changes
-
-* First release under new Snakebite label
-
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
 29: Added sed command to remove comment lines from the prodigal gene prediction
