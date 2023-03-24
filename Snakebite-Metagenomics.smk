@@ -15,8 +15,8 @@ shell.executable("bash")
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.5.2
-version = "0.5.2"
+##### Version: 0.5.9
+version = "0.5.9"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -265,6 +265,13 @@ rule all:
 #      "%s/CONCOCT/2k_clustering_gt1000.csv" % (config["project-folder"]),
 #      "%s/CONCOCT/fasta_bins_1k" % (config["project-folder"]),
 #      "%s/CONCOCT/fasta_bins_2k" % (config["project-folder"])
+
+rule readProcessing:
+    input:
+        expand("%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz" % (config["project-folder"]), samples = samples),
+        expand("%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz.md5" % (config["project-folder"]), samples = samples),
+        expand("%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz" % (config["project-folder"]), samples = samples),
+        expand("%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz.md5" % (config["project-folder"]), samples = samples)
 
 rule preparations:
     input:

@@ -264,7 +264,7 @@ rule fastqc_quality_control_decontaminated_data:
         time=cluster["fastqc_quality_control_decontaminated_data"]["time"],
         mem=cluster["fastqc_quality_control_decontaminated_data"]["mem-per-cpu"]
     params:
-        outfolder="%s/QC/DECONFAMINATED/" % (config["project-folder"])
+        outfolder="%s/QC/DECONTAMINATED/" % (config["project-folder"])
     singularity: config["singularity"]["gbs"]
     shell:"""
         mkdir -p {params.outfolder};

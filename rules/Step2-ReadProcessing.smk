@@ -6,9 +6,11 @@ rule Concatenate_lanes:
         R1=get_fastq_for_concatenating_read1,
         R2=get_fastq_for_concatenating_read2
     output:
-        R1=temp("%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz" % (config["project-folder"])),
+        R1="%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz" % (config["project-folder"]),
+        R1md5="%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz.md5" % (config["project-folder"]),
         R1Report="%s/FASTQ/CONCATENATED/{samples}_R1.fastq.gz.report" % (config["project-folder"]),
-        R2=temp("%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz" % (config["project-folder"])),
+        R2="%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz" % (config["project-folder"]),
+        R2md5="%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz.md5" % (config["project-folder"]),
         R2Report="%s/FASTQ/CONCATENATED/{samples}_R2.fastq.gz.report" % (config["project-folder"])
     log:
         "%s/logs/Concatenate_lanes.{samples}.log" % (config["project-folder"])
@@ -23,8 +25,10 @@ rule Concatenate_lanes:
     shell:"""
         mkdir -p {params.outfolder}
         cat {input.R1} > {output.R1} 2> {log}
+        md5sum {output.R1} > {output.R1md5} 2> {log}
         ls {input.R1} > {output.R1Report} 2> {log}
         cat {input.R2} > {output.R2} 2> {log}
+        md5sum {output.R2} > {output.R1md5} 2> {log}
         ls {input.R2} > {output.R2Report} 2> {log}
   	"""
   	

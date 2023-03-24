@@ -6,6 +6,10 @@
 
 ### Development version 0.5.*:
 --------------------------------------------------------------------------------
+9: Keep the concatenated RAW reads and create md5 sums for them
+
+8: Typo in the DECONTAMINATION FastQC rule fixed
+
 7: Added the QC part to the final report
 
 6: Added the basicStats section to the final report
