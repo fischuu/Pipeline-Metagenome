@@ -1,0 +1,30 @@
+pipeline-folder: "/users/fischerd/git/Snakebite-Metagenomics"
+project-folder: "/scratch/project_200XXXX/"                                               # Path to the project folder
+rawdata-folder: "FASTQ/RAW" 
+pipeline-config: "Snakebite-Metagenomics_config.yaml"
+server-config: "Snakebite-Metagenomics_server_config.yaml"
+samplesheet-file: "samplesheet.tsv"
+local-scratch: $LOCAL_SCRATCH
+tmp: "/scratch/project_200XXXX/tmp"
+contamination-folder: "Contamination/"
+contamination-refs: ["ARS-UCD1.2_Btau5.0.1Y.fa"]
+
+urls:
+    host: ""
+
+params:
+  fastp:
+    trim_front1: 12
+    trim_tail1: 0
+    trim_front2: 0
+    trim_tail2: 0
+  fastqc:
+    threads: 20
+  megahit:
+    kmin: 31          
+  star:
+    overhang: 149
+    limitGenomeGenerateRAM: 300647710720
+  concoct:
+    maxClusters: 4000
+    bedcut: 10000000

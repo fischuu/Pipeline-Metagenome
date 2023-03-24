@@ -4,6 +4,10 @@
 
 ## UPDATES
 
+### Release version 0.4
+--------------------------------------------------------------------------------
+Includes all previous updates
+
 ### Development version 0.3.*:
 --------------------------------------------------------------------------------
 29: Added sed command to remove comment lines from the prodigal gene prediction

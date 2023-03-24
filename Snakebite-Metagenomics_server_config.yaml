@@ -1,6 +1,6 @@
 __default__:
     time: 00:30:00
-    job-name:  SM_Metagenome
+    job-name:  SB_Metagenomics
     account: project_2006153
     ntasks: 1
     cpus-per-task: 1

@@ -11,12 +11,12 @@ from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
 HTTP = HTTPRemoteProvider()
 shell.executable("bash")
 
-##### Metagenome Snakemake Pipeline              #####
+##### Metagenomics Snakemake Pipeline              #####
 ##### Daniel Fischer (daniel.fischer@luke.fi)    #####
 ##### Natural Resources Institute Finland (Luke) #####
 
-##### Version: 0.3.23
-version = "0.3.23"
+##### Version: 0.4
+version = "0.4"
 
 ##### set minimum snakemake version #####
 min_version("6.0")
@@ -37,6 +37,9 @@ if(config["server-config"][0]!='/'):
 if(config["rawdata-folder"][0]!='/'):
     config["rawdata-folder"] = config["project-folder"] + '/' + config["rawdata-folder"]
 
+if(config["contamination-folder"][0]!='/'):
+    config["contamination-folder"] = config["project-folder"] + '/' + config["contamination-folder"]
+      
 if(config["samplesheet-file"][0]!='/'):
     config["samplesheet-file"] = config["project-folder"] + '/' + config["samplesheet-file"]
     
@@ -198,7 +201,7 @@ config["singularity"]["quast"] = "docker://fischuu/quast:5.2.0-0.2"
 
 ##### Print the welcome screen #####
 print("#################################################################################")
-print("##### Welcome to the Metagenome pipeline")
+print("##### Welcome to the Snakebite - Metagenomics pipeline")
 print("##### version: "+version)
 print("##### Number of rawsamples : "+str(len(rawsamples)))
 print("##### Number of samples    : "+str(len(samples)))
