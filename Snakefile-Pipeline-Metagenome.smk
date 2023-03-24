@@ -268,10 +268,10 @@ rule preparations:
 rule qc:
     input:
         "%s/QC/RAW/multiqc_R1/" % (config["project-folder"]),
-        "%s/QC/CONCATENATED/multiqc_R1/" % (config["project-folder"]),
+#        "%s/QC/CONCATENATED/multiqc_R1/" % (config["project-folder"]),
         "%s/QC/TRIMMED/multiqc_R1/" % (config["project-folder"]),
         expand("%s/QC/RAW/{rawsamples}_R1_qualdist.txt" % (config["project-folder"]), rawsamples=rawsamples),
-        expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
+#        expand("%s/QC/CONCATENATED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples),
         expand("%s/QC/TRIMMED/{samples}_R1_qualdist.txt" % (config["project-folder"]), samples=samples)
 
 rule decontaminate:
